@@ -241,6 +241,11 @@
       }
 
       .second-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        grid-template-columns: 1fr !important;
         padding: 0 14px;
         gap: 22px;
       }
@@ -248,6 +253,15 @@
       .second-kicker {
         font-size: 0.72rem;
         letter-spacing: 0.22em;
+      }
+
+      .second-copy {
+        max-width: 100%;
+        text-align: center;
+        transform: translateY(42px);
+        width: 100%;
+        order: 1;
+        flex: 0 0 auto;
       }
 
       .second-text {
@@ -258,6 +272,16 @@
       .second-card {
         padding: 26px 20px;
         border-radius: 24px;
+        width: 100% !important;
+        max-width: 420px;
+        margin: 0 auto;
+        order: 2;
+        flex: 0 0 auto;
+        justify-self: center !important;
+      }
+      .second-section.in-view .second-copy,
+      .second-section.in-view .second-card {
+        transform: translateY(0) !important;
       }
 
       .second-card-title {

@@ -243,21 +243,117 @@ function createFooter() {
         <div class="footer-main">
           ${columnsHtml}
           <div class="footer-brand-area">
-            <div class="footer-logo">PINNACLE</div>
+            <div class="footer-logo">PINN<span class="logo-lambda">Λ</span>CLE</div>
             <p class="footer-copy">Modern presentation. Elevated service.</p>
           </div>
+        </div>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/pinnaclerealty.ca?igsh=M216Z2g4ZnFwZjNl" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/instagram-logo.jpg" alt="Instagram" class="social-icon-img" />
+          </a>
+          <a href="https://www.linkedin.com/company/pinnaclerealtyca/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/linkedin-logo.jpg" alt="LinkedIn" class="social-icon-img" />
+          </a>
+          <a href="https://x.com/JagSaini1" class="social-icon" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/twitter-logo.jpg" alt="Twitter" class="social-icon-img" />
+          </a>
+          <a href="https://www.youtube.com/@PinnacleRealty905" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/youtube-logo.jpg" alt="YouTube" class="social-icon-img" />
+          </a>
+          <a href="https://www.facebook.com/PinnacleRealtyCanada" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/facebook-logo.jpg" alt="Facebook" class="social-icon-img" />
+          </a>
         </div>
         <div class="footer-bottom">
           <strong>PINNACLE REALTY</strong>
           <span>Copyright © <span id="year"></span> All Rights Reserved</span>
-          <a href="contact.html">Privacy Policy</a>
-          <a href="contact.html">Terms of Service</a>
+          <button type="button" class="footer-legal-trigger" data-legal="privacy">Privacy Policy</button>
+          <button type="button" class="footer-legal-trigger" data-legal="terms">Terms of Service</button>
         </div>
       </div>
-    </footer>`;
+    </footer>
+      <div class="legal-modal" id="legalModal" aria-hidden="true">
+        <div class="legal-modal-backdrop" data-legal-close></div>
+        <div class="legal-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+          <button type="button" class="legal-modal-close" id="legalModalClose" aria-label="Close legal popup">×</button>
+          <div class="legal-modal-content" id="legalModalContent"></div>
+        </div>
+      </div>
+  `;
 
   const year = mount.querySelector('#year');
   if (year) year.textContent = new Date().getFullYear();
+
+  const legalCopy = {
+    privacy: {
+      title: 'Privacy Policy',
+      html: `
+        <h2 id="legalModalTitle">Privacy Policy</h2>
+        <p>At Pinnacle Realty, your privacy matters. This website may collect personal information you choose to submit, such as your name, email address, phone number, property preferences, and any details you provide through forms or direct inquiries.</p>
+        <p>We use this information to respond to requests, provide real estate guidance, share relevant updates, and improve the overall experience of the website. We may also use limited website analytics to understand how visitors interact with our pages and to improve performance, navigation, and content.</p>
+        <p>Your information is not sold to third parties. Information may be shared only with trusted service providers or licensed team members when necessary to support communication, scheduling, listings-related services, or legal and regulatory obligations connected to real estate operations.</p>
+        <p>While we take reasonable steps to protect submitted information, no method of internet transmission or storage can be guaranteed to be completely secure. By using this website, you understand and accept that standard online communication carries some level of risk.</p>
+        <p>This website may contain links, future integrations, or embedded services from third parties. Those services may operate under their own privacy practices. We encourage visitors to review third-party terms and privacy notices when using those features.</p>
+        <p>If you would like to request an update, correction, or deletion of information you have submitted through this website, please contact Pinnacle Realty directly using the website contact page.</p>
+      `
+    },
+    terms: {
+      title: 'Terms of Service',
+      html: `
+        <h2 id="legalModalTitle">Terms of Service</h2>
+        <p>By accessing and using the Pinnacle Realty website, you agree to use the site only for lawful purposes related to learning about services, browsing information, making inquiries, or contacting the brokerage.</p>
+        <p>All website content, including branding, design elements, text, visuals, page structure, and presentation, is provided for general informational purposes only and may be updated, modified, or removed at any time without notice.</p>
+        <p>Real estate information shown on this website, including future listing tools, property descriptions, market-related content, and service details, may change over time and should not be considered guaranteed, final, or legally binding unless confirmed directly through a licensed representative.</p>
+        <p>You agree not to misuse the website, attempt unauthorized access, interfere with performance, copy protected content for commercial use, or use automated tools in a way that disrupts the normal operation of the site.</p>
+        <p>Pinnacle Realty is not responsible for losses or damages arising from reliance on website content alone, service interruptions, technical errors, third-party tools, or external links. Visitors should confirm material details directly before making real estate decisions.</p>
+        <p>Continued use of this website means you accept these terms. If you do not agree with them, you should discontinue use of the website.</p>
+      `
+    }
+  };
+
+  const legalModal = mount.querySelector('#legalModal');
+  const legalModalContent = mount.querySelector('#legalModalContent');
+  const legalModalClose = mount.querySelector('#legalModalClose');
+  const legalTriggers = mount.querySelectorAll('.footer-legal-trigger');
+
+  const openLegalModal = (type) => {
+    const copy = legalCopy[type];
+    if (!copy || !legalModal || !legalModalContent) return;
+
+    legalModalContent.innerHTML = copy.html;
+    legalModal.classList.add('open');
+    legalModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('legal-modal-open');
+    legalModalClose?.focus();
+  };
+
+  const closeLegalModal = () => {
+    if (!legalModal || !legalModalContent) return;
+    legalModal.classList.remove('open');
+    legalModal.setAttribute('aria-hidden', 'true');
+    legalModalContent.innerHTML = '';
+    document.body.classList.remove('legal-modal-open');
+  };
+
+  legalTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      openLegalModal(trigger.dataset.legal);
+    });
+  });
+
+  legalModalClose?.addEventListener('click', closeLegalModal);
+
+  legalModal?.addEventListener('click', (event) => {
+    if (event.target instanceof HTMLElement && event.target.hasAttribute('data-legal-close')) {
+      closeLegalModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && legalModal?.classList.contains('open')) {
+      closeLegalModal();
+    }
+  });
 }
 
 createNav();
