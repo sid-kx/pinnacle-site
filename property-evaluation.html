@@ -5,17 +5,843 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Property Evaluation | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .evaluation-page {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(214, 171, 77, 0.14), transparent 22%),
+        radial-gradient(circle at 86% 10%, rgba(214, 171, 77, 0.08), transparent 18%),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 56%, #050505 100%);
+    }
+
+    .evaluation-page::before,
+    .evaluation-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(18px);
+      opacity: 0.42;
+      animation: evaluationFloat 15s ease-in-out infinite;
+    }
+
+    .evaluation-page::before {
+      top: 120px;
+      right: -100px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(214,171,77,0.15), transparent 70%);
+    }
+
+    .evaluation-page::after {
+      bottom: 180px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(214,171,77,0.10), transparent 72%);
+      animation-delay: -5s;
+    }
+
+    .evaluation-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, calc(100% - 56px));
+      margin: 0 auto;
+      padding: 40px 0 96px;
+    }
+
+    .evaluation-hero {
+      position: relative;
+      min-height: 78vh;
+      border-radius: 38px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      align-items: stretch;
+      background:
+        linear-gradient(112deg, rgba(8,8,8,0.82) 12%, rgba(8,8,8,0.42) 46%, rgba(8,8,8,0.86) 100%),
+        radial-gradient(circle at 72% 24%, rgba(214,171,77,0.14), transparent 24%),
+        url('assets/images/property-evaluation.jpg') center/cover no-repeat;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 34px 80px rgba(0,0,0,0.42);
+      isolation: isolate;
+    }
+
+    .evaluation-hero::before,
+    .evaluation-calculator-card::before,
+    .evaluation-results-card::before,
+    .evaluation-info-card::before,
+    .evaluation-disclaimer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214,171,77,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .evaluation-copy,
+    .evaluation-calculator-card,
+    .evaluation-results-card,
+    .evaluation-info-card,
+    .evaluation-disclaimer {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 0.95s ease, transform 0.95s ease;
+      will-change: transform, opacity;
+    }
+
+    .reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .evaluation-copy {
+      position: relative;
+      z-index: 1;
+      padding: 96px 72px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .evaluation-kicker,
+    .evaluation-section-label,
+    .evaluation-side-label,
+    .result-label {
+      margin: 0 0 18px;
+      font-size: 0.8rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #efc76d;
+    }
+
+    .evaluation-title,
+    .evaluation-side-heading,
+    .evaluation-calculator-card h2,
+    .evaluation-results-card h2,
+    .evaluation-info-card h2,
+    .evaluation-disclaimer h2 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 10px 34px rgba(0,0,0,0.34);
+    }
+
+    .evaluation-title {
+      font-size: clamp(3rem, 5vw, 5.4rem);
+      max-width: 780px;
+    }
+
+    .evaluation-title .accent,
+    .estimated-range,
+    .info-point strong {
+      color: #efc76d;
+    }
+
+    .evaluation-description,
+    .evaluation-side-text,
+    .evaluation-helper,
+    .result-copy,
+    .result-note,
+    .info-point p,
+    .evaluation-disclaimer p,
+    .form-note {
+      color: rgba(245,239,230,0.82);
+      line-height: 1.82;
+      font-size: 1.02rem;
+    }
+
+    .evaluation-description {
+      margin: 26px 0 0;
+      max-width: 660px;
+      font-size: 1.06rem;
+      line-height: 1.86;
+    }
+
+    .evaluation-actions,
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .evaluation-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .evaluation-btn-primary {
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      color: #131313;
+      box-shadow: 0 18px 34px rgba(201,152,52,0.18);
+    }
+
+    .evaluation-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 38px rgba(201,152,52,0.24);
+    }
+
+    .evaluation-btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f5efe6;
+    }
+
+    .evaluation-btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+
+
+
+    .evaluation-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .evaluation-calculator-card,
+    .evaluation-results-card,
+    .evaluation-info-card,
+    .evaluation-disclaimer {
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.90), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+
+    .evaluation-calculator-card,
+    .evaluation-results-card,
+    .evaluation-info-card,
+    .evaluation-disclaimer {
+      padding: 34px 32px;
+    }
+
+    .evaluation-calculator-card h2,
+    .evaluation-results-card h2,
+    .evaluation-info-card h2,
+    .evaluation-disclaimer h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .evaluation-helper {
+      margin: 16px 0 0;
+      max-width: 760px;
+    }
+
+    .evaluation-form {
+      margin-top: 28px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .form-section {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-section-title {
+      margin: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(239,199,109,0.92);
+      font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .form-field,
+    .form-field-full {
+      display: grid;
+      gap: 10px;
+    }
+
+    .form-field-full {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label,
+    .form-field-full label {
+      color: rgba(245,239,230,0.82);
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field-full input,
+    .form-field-full textarea {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #f8f3eb;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .form-field-full textarea {
+      min-height: 140px;
+      padding: 14px 16px;
+      resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field-full input:focus,
+    .form-field-full textarea:focus {
+      border-color: rgba(239,199,109,0.28);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 3px rgba(239,199,109,0.08);
+    }
+
+    .form-note {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .evaluation-submit-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .evaluation-results-card {
+      position: sticky;
+      top: 120px;
+    }
+
+    .result-copy {
+      margin: 16px 0 0;
+      font-size: 0.98rem;
+    }
+
+    .estimated-range {
+      display: block;
+      margin-top: 18px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.4rem, 3vw, 4rem);
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+    }
+
+    .result-stats {
+      margin-top: 24px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .result-stat {
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .result-stat strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(239,199,109,0.92);
+      font-weight: 700;
+    }
+
+    .result-stat span {
+      color: #f8f3eb;
+      font-size: 1.02rem;
+      line-height: 1.55;
+    }
+
+    .result-note {
+      margin: 20px 0 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(245,239,230,0.7);
+    }
+
+    .evaluation-info-card,
+    .evaluation-disclaimer {
+      margin-top: 24px;
+    }
+
+    .info-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .info-point {
+      padding: 20px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .info-point strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 0.84rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .info-point p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.68;
+    }
+
+    @keyframes evaluationFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -20px, 0); }
+    }
+
+    @media (max-width: 1120px) {
+      .evaluation-hero,
+      .evaluation-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .evaluation-copy {
+        padding: 84px 36px 34px;
+      }
+
+      .evaluation-results-card {
+        position: relative;
+        top: auto;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .evaluation-shell {
+        width: min(100%, calc(100% - 20px));
+        padding: 24px 0 64px;
+      }
+
+      .evaluation-hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .evaluation-copy {
+        padding: 70px 22px 24px;
+      }
+
+      .evaluation-title {
+        font-size: clamp(2.4rem, 9vw, 3.8rem);
+      }
+
+      .evaluation-description,
+      .evaluation-helper,
+      .result-copy,
+      .result-note,
+      .info-point p,
+      .evaluation-disclaimer p,
+      .form-note {
+        font-size: 0.96rem;
+        line-height: 1.72;
+      }
+
+      .evaluation-actions,
+      .result-actions,
+      .evaluation-submit-row {
+        flex-direction: column;
+      }
+
+      .evaluation-btn {
+        width: 100%;
+      }
+
+      .evaluation-calculator-card,
+      .evaluation-results-card,
+      .evaluation-info-card,
+      .evaluation-disclaimer {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .estimated-range {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
 </head>
 <body data-page="property-evaluation" data-title="Property Evaluation">
   <div id="site-header"></div>
 
-  <main class="blank-main" aria-label="Property Evaluation page">
-    <section class="blank-stage">
-      <div class="blank-card" aria-hidden="true"></div>
-    </section>
+  <main class="evaluation-page" aria-label="Property Evaluation page">
+    <div class="evaluation-shell">
+      <section class="evaluation-hero">
+        <div class="evaluation-copy reveal-on-scroll">
+          <p class="evaluation-kicker">Property evaluation</p>
+          <h1 class="evaluation-title">Get a clearer market <span class="accent">range</span> for your property.</h1>
+          <p class="evaluation-description">This estimator is designed to give sellers a polished starting point based on property details, size, features, and presentation factors. Enter your home information below to receive an estimated value range and a confidence level.</p>
+          <div class="evaluation-actions">
+            <a href="#evaluation-calculator" class="evaluation-btn evaluation-btn-primary">Start Your Estimate</a>
+            <a href="contact.html" class="evaluation-btn evaluation-btn-secondary">Speak With Pinnacle</a>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="evaluation-grid" id="evaluation-calculator">
+        <article class="evaluation-calculator-card reveal-on-scroll">
+          <p class="evaluation-section-label">Interactive estimator</p>
+          <h2>Enter your property details.</h2>
+          <p class="evaluation-helper">Fill in the basics below. The calculator will estimate a market range using city, home type, size, condition, and upgrades to produce a more realistic starting range.</p>
+
+          <form class="evaluation-form" id="evaluationForm">
+            <div class="form-section">
+              <p class="form-section-title">Property basics</p>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="city">City</label>
+                  <select id="city" name="city" required>
+                    <option value="">Select city</option>
+                    <option value="mississauga">Mississauga</option>
+                    <option value="brampton">Brampton</option>
+                    <option value="vaughan">Vaughan</option>
+                    <option value="toronto">Toronto</option>
+                    <option value="milton">Milton</option>
+                    <option value="oakville">Oakville</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="propertyType">Property type</label>
+                  <select id="propertyType" name="propertyType" required>
+                    <option value="">Select type</option>
+                    <option value="detached">Detached</option>
+                    <option value="semi">Semi-Detached</option>
+                    <option value="townhouse">Townhouse</option>
+                    <option value="condo">Condo</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="bedrooms">Bedrooms</label>
+                  <input id="bedrooms" name="bedrooms" type="number" min="1" max="10" value="3" required />
+                </div>
+                <div class="form-field">
+                  <label for="bathrooms">Bathrooms</label>
+                  <input id="bathrooms" name="bathrooms" type="number" min="1" max="10" value="2" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <p class="form-section-title">Size and features</p>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="squareFootage">Square footage</label>
+                  <input id="squareFootage" name="squareFootage" type="number" min="300" step="10" value="1800" required />
+                </div>
+                <div class="form-field">
+                  <label for="garageSpaces">Garage spaces</label>
+                  <input id="garageSpaces" name="garageSpaces" type="number" min="0" max="6" value="1" required />
+                </div>
+                <div class="form-field">
+                  <label for="basement">Basement</label>
+                  <select id="basement" name="basement" required>
+                    <option value="unfinished">Unfinished</option>
+                    <option value="finished">Finished</option>
+                    <option value="walkout">Finished walkout</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="lotType">Lot quality</label>
+                  <select id="lotType" name="lotType" required>
+                    <option value="standard">Standard</option>
+                    <option value="corner">Corner lot</option>
+                    <option value="premium">Premium lot</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <p class="form-section-title">Condition and upgrades</p>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="condition">Overall condition</label>
+                  <select id="condition" name="condition" required>
+                    <option value="average">Average</option>
+                    <option value="updated">Updated</option>
+                    <option value="renovated">Fully renovated</option>
+                    <option value="needs-work">Needs work</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="kitchenBath">Kitchen & baths</label>
+                  <select id="kitchenBath" name="kitchenBath" required>
+                    <option value="standard">Standard</option>
+                    <option value="partially-updated">Partially updated</option>
+                    <option value="fully-updated">Fully updated</option>
+                  </select>
+                </div>
+                <div class="form-field-full">
+                  <label for="ownerName">Your name</label>
+                  <input id="ownerName" name="ownerName" type="text" placeholder="Optional" />
+                </div>
+                <div class="form-field-full">
+                  <label for="notes">Anything else about the property?</label>
+                  <textarea id="notes" name="notes" placeholder="Recent upgrades, premium features, views, or anything else you'd like Pinnacle to know."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <p class="form-note">This estimate is for informational purposes only and does not replace a professional market evaluation. Final value depends on property condition, location, current market activity, and comparable sales.</p>
+
+            <div class="evaluation-submit-row">
+              <button type="submit" class="evaluation-btn evaluation-btn-primary">Calculate My Range</button>
+              <button type="reset" class="evaluation-btn evaluation-btn-secondary" id="evaluationReset">Reset Form</button>
+            </div>
+          </form>
+        </article>
+
+        <aside class="evaluation-results-card reveal-on-scroll" id="resultsCard" aria-live="polite">
+          <p class="result-label">Estimated range</p>
+          <h2>Your property range appears here.</h2>
+          <p class="result-copy">Use the calculator to generate a starting range. Once calculated, the estimate below will update with a likely value band and confidence level.</p>
+          <span class="estimated-range" id="estimatedRange">$—</span>
+
+          <div class="result-stats">
+            <div class="result-stat">
+              <strong>Confidence level</strong>
+              <span id="confidenceLevel">Waiting for your details</span>
+            </div>
+            <div class="result-stat">
+              <strong>Estimated midpoint</strong>
+              <span id="midpointValue">—</span>
+            </div>
+            <div class="result-stat">
+              <strong>Next recommended step</strong>
+              <span id="nextStepText">Complete the form for your starting range.</span>
+            </div>
+          </div>
+
+          <p class="result-note" id="resultNote">For a more precise evaluation backed by local context and brokerage insight, reach out to Pinnacle Realty after receiving your estimate.</p>
+
+          <div class="result-actions">
+            <a href="contact.html" class="evaluation-btn evaluation-btn-primary">Request a More Precise Evaluation</a>
+            <a href="sellers.html" class="evaluation-btn evaluation-btn-secondary">Back to Sellers</a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="evaluation-info-card reveal-on-scroll">
+        <p class="evaluation-section-label">How this works</p>
+        <h2>A cleaner estimate that focuses on range, not false precision.</h2>
+        <div class="info-grid">
+          <div class="info-point">
+            <strong>City-based starting point</strong>
+            <p>The tool begins with a base value shaped by city and property type to reflect broad market differences.</p>
+          </div>
+          <div class="info-point">
+            <strong>Feature adjustments</strong>
+            <p>Bedrooms, bathrooms, square footage, basement finish, garage space, and lot type shift the estimate upward or downward.</p>
+          </div>
+          <div class="info-point">
+            <strong>Condition score</strong>
+            <p>Updated and renovated homes earn stronger results, while properties needing work produce a more cautious starting estimate.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="evaluation-disclaimer reveal-on-scroll">
+        <p class="evaluation-section-label">Important note</p>
+        <h2>This is a smart estimate, not a formal appraisal.</h2>
+        <p>The result is designed as a conversation starter and lead-in to a more tailored review. It does not replace a professional market evaluation, appraisal, or brokerage opinion based on active comparable sales and current local demand.</p>
+      </section>
+    </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
+  <script>
+    (() => {
+      const revealItems = document.querySelectorAll('.reveal-on-scroll');
+      if (revealItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -6% 0px'
+        });
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 90}ms`;
+          observer.observe(item);
+        });
+      }
+
+      const form = document.getElementById('evaluationForm');
+      const rangeEl = document.getElementById('estimatedRange');
+      const confidenceEl = document.getElementById('confidenceLevel');
+      const midpointEl = document.getElementById('midpointValue');
+      const nextStepEl = document.getElementById('nextStepText');
+      const resultNoteEl = document.getElementById('resultNote');
+      const resetBtn = document.getElementById('evaluationReset');
+
+      const cityBase = {
+        mississauga: 920000,
+        brampton: 830000,
+        vaughan: 980000,
+        toronto: 1100000,
+        milton: 880000,
+        oakville: 1200000
+      };
+
+      const propertyTypeBase = {
+        detached: 180000,
+        semi: 80000,
+        townhouse: 30000,
+        condo: -90000
+      };
+
+      const basementAdjust = {
+        unfinished: 0,
+        finished: 35000,
+        walkout: 65000
+      };
+
+      const lotAdjust = {
+        standard: 0,
+        corner: 35000,
+        premium: 70000
+      };
+
+      const conditionAdjust = {
+        average: 0,
+        updated: 55000,
+        renovated: 105000,
+        'needs-work': -95000
+      };
+
+      const kitchenBathAdjust = {
+        standard: 0,
+        'partially-updated': 30000,
+        'fully-updated': 70000
+      };
+
+      const currency = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+        maximumFractionDigits: 0
+      });
+
+      const calculateRange = (data) => {
+        const city = cityBase[data.city] || 0;
+        const type = propertyTypeBase[data.propertyType] || 0;
+        const bedrooms = Math.max(0, (Number(data.bedrooms) - 3) * 30000);
+        const bathrooms = Math.max(0, (Number(data.bathrooms) - 2) * 22000);
+        const squareFootage = (Number(data.squareFootage) - 1500) * 140;
+        const garage = Number(data.garageSpaces) * 12000;
+        const basement = basementAdjust[data.basement] || 0;
+        const lot = lotAdjust[data.lotType] || 0;
+        const condition = conditionAdjust[data.condition] || 0;
+        const kitchenBath = kitchenBathAdjust[data.kitchenBath] || 0;
+
+        const midpoint = city + type + bedrooms + bathrooms + squareFootage + garage + basement + lot + condition + kitchenBath;
+
+        const detailScore = [
+          data.city,
+          data.propertyType,
+          data.bedrooms,
+          data.bathrooms,
+          data.squareFootage,
+          data.garageSpaces,
+          data.basement,
+          data.lotType,
+          data.condition,
+          data.kitchenBath
+        ].filter(Boolean).length;
+
+        let spread = 150000;
+        let confidence = 'Moderate';
+
+        if (detailScore >= 9) {
+          spread = 130000;
+          confidence = 'Stronger';
+        } else if (detailScore <= 6) {
+          spread = 170000;
+          confidence = 'Broad';
+        }
+
+        const min = Math.max(0, Math.round((midpoint - spread) / 5000) * 5000);
+        const max = Math.max(min + 50000, Math.round((midpoint + spread) / 5000) * 5000);
+        const roundedMidpoint = Math.round(midpoint / 5000) * 5000;
+
+        return { min, max, midpoint: roundedMidpoint, confidence };
+      };
+
+      form?.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const result = calculateRange(data);
+
+        rangeEl.textContent = `${currency.format(result.min)} – ${currency.format(result.max)}`;
+        confidenceEl.textContent = `${result.confidence} estimate range`;
+        midpointEl.textContent = currency.format(result.midpoint);
+        nextStepEl.textContent = 'Request a brokerage review for a more precise market opinion.';
+        resultNoteEl.textContent = `Based on the details provided, your property may fall within this estimated range. Final value depends on street-level location, current comparable sales, presentation, and market timing.`;
+      });
+
+      resetBtn?.addEventListener('click', () => {
+        window.setTimeout(() => {
+          rangeEl.textContent = '$—';
+          confidenceEl.textContent = 'Waiting for your details';
+          midpointEl.textContent = '—';
+          nextStepEl.textContent = 'Complete the form for your starting range.';
+          resultNoteEl.textContent = 'For a more precise evaluation backed by local context and brokerage insight, reach out to Pinnacle Realty after receiving your estimate.';
+        }, 0);
+      });
+    })();
+  </script>
 </body>
 </html>
