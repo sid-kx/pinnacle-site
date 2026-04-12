@@ -5,17 +5,905 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mortgage Guide | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .mortgage-page {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(214, 171, 77, 0.14), transparent 22%),
+        radial-gradient(circle at 86% 10%, rgba(214, 171, 77, 0.08), transparent 18%),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 56%, #050505 100%);
+    }
+
+    .mortgage-page::before,
+    .mortgage-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(18px);
+      opacity: 0.42;
+      animation: mortgageFloat 8s ease-in-out infinite;
+    }
+
+    .mortgage-page::before {
+      top: 120px;
+      right: -100px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(214,171,77,0.15), transparent 70%);
+    }
+
+    .mortgage-page::after {
+      bottom: 180px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(214,171,77,0.10), transparent 72%);
+      animation-delay: -5s;
+    }
+
+    .mortgage-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, calc(100% - 56px));
+      margin: 0 auto;
+      padding: 40px 0 96px;
+    }
+
+    .mortgage-hero {
+      position: relative;
+      min-height: 78vh;
+      border-radius: 38px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      align-items: stretch;
+      background:
+        linear-gradient(112deg, rgba(8,8,8,0.82) 12%, rgba(8,8,8,0.42) 46%, rgba(8,8,8,0.86) 100%),
+        radial-gradient(circle at 72% 24%, rgba(214,171,77,0.14), transparent 24%),
+        url('assets/images/sauga3.png') center/cover no-repeat;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 34px 80px rgba(0,0,0,0.42);
+      isolation: isolate;
+    }
+
+    .mortgage-hero::before,
+    .mortgage-calculator-card::before,
+    .mortgage-results-card::before,
+    .mortgage-terms-section::before,
+    .mortgage-comparison::before,
+    .mortgage-guidance::before,
+    .mortgage-final-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214,171,77,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .mortgage-copy,
+    .mortgage-calculator-card,
+    .mortgage-results-card,
+    .mortgage-terms-section,
+    .mortgage-comparison,
+    .mortgage-guidance,
+    .mortgage-final-cta {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.32s ease, transform 0.32s ease;
+      will-change: transform, opacity;
+    }
+
+    .reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mortgage-copy {
+      position: relative;
+      z-index: 1;
+      padding: 96px 72px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .mortgage-kicker,
+    .mortgage-section-label,
+    .mortgage-side-label,
+    .result-label,
+    .term-card-label,
+    .comparison-card-label {
+      margin: 0 0 18px;
+      font-size: 0.8rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #efc76d;
+    }
+
+    .mortgage-title,
+    .mortgage-side-heading,
+    .mortgage-calculator-card h2,
+    .mortgage-results-card h2,
+    .mortgage-terms-section h2,
+    .mortgage-comparison h2,
+    .mortgage-guidance h2,
+    .mortgage-final-cta h2,
+    .comparison-card h3 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 10px 34px rgba(0,0,0,0.34);
+    }
+
+    .mortgage-title {
+      font-size: clamp(2.7rem, 4.8vw, 5rem);
+      max-width: 780px;
+    }
+
+    .mortgage-title .accent,
+    .payment-value,
+    .result-stat strong,
+    .term-card strong,
+    .guidance-list li::before,
+    .comparison-card-label {
+      color: #efc76d;
+    }
+
+    .mortgage-description,
+    .mortgage-helper,
+    .mortgage-results-card p,
+    .term-card p,
+    .comparison-card p,
+    .guidance-list li,
+    .mortgage-final-cta p,
+    .form-note,
+    .mortgage-field label,
+    .mortgage-field input,
+    .mortgage-field select {
+      color: rgba(245,239,230,0.82);
+      line-height: 1.82;
+      font-size: 1.02rem;
+    }
+
+    .mortgage-description {
+      margin: 26px 0 0;
+      max-width: 660px;
+      font-size: 1.06rem;
+      line-height: 1.86;
+    }
+
+    .mortgage-actions,
+    .mortgage-submit-row,
+    .mortgage-final-actions,
+    .mortgage-results-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .mortgage-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .mortgage-btn-primary {
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      color: #131313;
+      box-shadow: 0 18px 34px rgba(201,152,52,0.18);
+    }
+
+    .mortgage-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 38px rgba(201,152,52,0.24);
+    }
+
+    .mortgage-btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f5efe6;
+    }
+
+    .mortgage-btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+
+
+
+    .mortgage-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .mortgage-calculator-card,
+    .mortgage-results-card,
+    .mortgage-terms-section,
+    .mortgage-comparison,
+    .mortgage-guidance,
+    .mortgage-final-cta {
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.90), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+
+    .mortgage-calculator-card,
+    .mortgage-results-card,
+    .mortgage-terms-section,
+    .mortgage-comparison,
+    .mortgage-guidance,
+    .mortgage-final-cta {
+      padding: 34px 32px;
+    }
+
+    .mortgage-calculator-card h2,
+    .mortgage-results-card h2,
+    .mortgage-terms-section h2,
+    .mortgage-comparison h2,
+    .mortgage-guidance h2,
+    .mortgage-final-cta h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .mortgage-helper {
+      margin: 16px 0 0;
+      max-width: 760px;
+    }
+
+    .mortgage-form {
+      margin-top: 28px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .mortgage-form-section {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mortgage-form-title {
+      margin: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(239,199,109,0.92);
+      font-weight: 700;
+    }
+
+    .mortgage-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mortgage-field,
+    .mortgage-field-full {
+      display: grid;
+      gap: 10px;
+    }
+
+    .mortgage-field-full {
+      grid-column: 1 / -1;
+    }
+
+    .mortgage-field label,
+    .mortgage-field-full label {
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mortgage-field input,
+    .mortgage-field select,
+    .mortgage-field-full input {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #f8f3eb;
+      outline: none;
+      transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .mortgage-field input:focus,
+    .mortgage-field select:focus,
+    .mortgage-field-full input:focus {
+      border-color: rgba(239,199,109,0.28);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 3px rgba(239,199,109,0.08);
+    }
+
+    .form-note {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(245,239,230,0.72);
+    }
+
+    .mortgage-results-card {
+      position: sticky;
+      top: 120px;
+    }
+
+    .payment-value {
+      display: block;
+      margin-top: 18px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.4rem, 3vw, 4rem);
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+    }
+
+    .payment-frequency-label {
+      margin-top: 10px;
+      color: rgba(245,239,230,0.72);
+      font-size: 0.94rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .result-stats {
+      margin-top: 24px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .result-stat {
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .result-stat strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .result-stat span {
+      color: #f8f3eb;
+      font-size: 1.02rem;
+      line-height: 1.55;
+    }
+
+    .mortgage-terms-section,
+    .mortgage-comparison,
+    .mortgage-guidance,
+    .mortgage-final-cta {
+      margin-top: 24px;
+    }
+
+    .term-cards,
+    .comparison-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .term-card,
+    .comparison-card {
+      padding: 22px 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .term-card strong,
+    .comparison-card-label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .term-card p,
+    .comparison-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .comparison-card h3 {
+      font-size: 1.8rem;
+      line-height: 1.06;
+      text-shadow: none;
+      margin-bottom: 14px;
+    }
+
+    .guidance-list {
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .guidance-list li {
+      display: flex;
+      gap: 12px;
+      line-height: 1.72;
+    }
+
+    .guidance-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-top: 10px;
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      box-shadow: 0 0 10px rgba(214,171,77,0.34);
+      flex: 0 0 auto;
+    }
+
+    .mortgage-final-cta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+    }
+
+    @keyframes mortgageFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -20px, 0); }
+    }
+
+    @media (max-width: 1120px) {
+      .mortgage-hero,
+      .mortgage-grid,
+      .mortgage-final-cta,
+      .term-cards,
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mortgage-copy {
+        padding: 84px 36px 34px;
+      }
+
+      .mortgage-results-card {
+        position: relative;
+        top: auto;
+      }
+
+      .mortgage-final-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .mortgage-shell {
+        width: min(100%, calc(100% - 20px));
+        padding: 24px 0 64px;
+      }
+
+      .mortgage-hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .mortgage-copy {
+        padding: 70px 22px 24px;
+      }
+
+      .mortgage-title {
+        font-size: clamp(2.35rem, 9vw, 3.8rem);
+      }
+
+      .mortgage-description,
+      .mortgage-helper,
+      .mortgage-results-card p,
+      .term-card p,
+      .comparison-card p,
+      .guidance-list li,
+      .mortgage-final-cta p,
+      .form-note,
+      .mortgage-field label,
+      .mortgage-field input,
+      .mortgage-field select {
+        font-size: 0.96rem;
+        line-height: 1.72;
+      }
+
+      .mortgage-actions,
+      .mortgage-submit-row,
+      .mortgage-final-actions,
+      .mortgage-results-actions {
+        flex-direction: column;
+      }
+
+      .mortgage-btn {
+        width: 100%;
+      }
+
+      .mortgage-calculator-card,
+      .mortgage-results-card,
+      .mortgage-terms-section,
+      .mortgage-comparison,
+      .mortgage-guidance,
+      .mortgage-final-cta {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .mortgage-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .payment-value {
+        font-size: 2.15rem;
+      }
+    }
+  </style>
 </head>
 <body data-page="mortgage-guide" data-title="Mortgage Guide">
   <div id="site-header"></div>
 
-  <main class="blank-main" aria-label="Mortgage Guide page">
-    <section class="blank-stage">
-      <div class="blank-card" aria-hidden="true"></div>
-    </section>
+  <main class="mortgage-page" aria-label="Mortgage Guide page">
+    <div class="mortgage-shell">
+      <section class="mortgage-hero">
+        <div class="mortgage-copy reveal-on-scroll">
+          <p class="mortgage-kicker">Mortgage guide</p>
+          <h1 class="mortgage-title">Understand the <span class="accent">numbers</span> before you make the move.</h1>
+          <p class="mortgage-description">This page is designed to help buyers estimate mortgage payments, understand key terms, and feel more prepared before speaking with a lender or moving forward on a property. Use the calculator below as a clean starting point.</p>
+          <div class="mortgage-actions">
+            <a href="#mortgage-calculator" class="mortgage-btn mortgage-btn-primary">Try the Calculator</a>
+            <a href="contact.html" class="mortgage-btn mortgage-btn-secondary">Talk to Pinnacle</a>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="mortgage-grid" id="mortgage-calculator">
+        <article class="mortgage-calculator-card reveal-on-scroll">
+          <p class="mortgage-section-label">Mortgage calculator</p>
+          <h2>Estimate your payments.</h2>
+          <p class="mortgage-helper">Enter your mortgage amount, rate, term, and payment frequency to estimate what your payments could look like. This is a guide tool only and does not replace lender approval or mortgage advice.</p>
+
+          <form class="mortgage-form" id="mortgageForm">
+            <div class="mortgage-form-section">
+              <p class="mortgage-form-title">Loan details</p>
+              <div class="mortgage-form-grid">
+                <div class="mortgage-field-full">
+                  <label for="mortgageAmount">Mortgage amount</label>
+                  <input id="mortgageAmount" name="mortgageAmount" type="number" min="10000" step="1000" value="650000" required />
+                </div>
+                <div class="mortgage-field">
+                  <label for="amortYears">Amortization years</label>
+                  <select id="amortYears" name="amortYears">
+                    <option value="10">10 Years</option>
+                    <option value="15">15 Years</option>
+                    <option value="20">20 Years</option>
+                    <option value="25" selected>25 Years</option>
+                    <option value="30">30 Years</option>
+                  </select>
+                </div>
+                <div class="mortgage-field">
+                  <label for="amortMonths">Amortization months</label>
+                  <select id="amortMonths" name="amortMonths">
+                    <option value="0" selected>0 Months</option>
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="9">9 Months</option>
+                  </select>
+                </div>
+                <div class="mortgage-field">
+                  <label for="paymentFrequency">Payment frequency</label>
+                  <select id="paymentFrequency" name="paymentFrequency">
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="biweekly">Bi-Weekly</option>
+                    <option value="accelerated-biweekly">Accelerated Bi-Weekly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="accelerated-weekly">Accelerated Weekly</option>
+                  </select>
+                </div>
+                <div class="mortgage-field">
+                  <label for="interestRate">Interest rate (%)</label>
+                  <input id="interestRate" name="interestRate" type="number" min="0.1" step="0.001" value="4.590" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="mortgage-form-section">
+              <p class="mortgage-form-title">Term details</p>
+              <div class="mortgage-form-grid">
+                <div class="mortgage-field">
+                  <label for="interestType">Interest type</label>
+                  <select id="interestType" name="interestType">
+                    <option value="fixed" selected>Fixed</option>
+                    <option value="variable">Variable</option>
+                  </select>
+                </div>
+                <div class="mortgage-field">
+                  <label for="termYears">Interest term years</label>
+                  <select id="termYears" name="termYears">
+                    <option value="1">1 Year</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                    <option value="4">4 Years</option>
+                    <option value="5" selected>5 Years</option>
+                    <option value="7">7 Years</option>
+                    <option value="10">10 Years</option>
+                  </select>
+                </div>
+                <div class="mortgage-field">
+                  <label for="termMonths">Interest term months</label>
+                  <select id="termMonths" name="termMonths">
+                    <option value="0" selected>0 Months</option>
+                    <option value="3">3 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="9">9 Months</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <p class="form-note">This estimate is for informational purposes only and does not replace lender approval, mortgage advice, or a full financing review.</p>
+
+            <div class="mortgage-submit-row">
+              <button type="submit" class="mortgage-btn mortgage-btn-primary">Calculate</button>
+              <button type="reset" class="mortgage-btn mortgage-btn-secondary" id="mortgageReset">Reset</button>
+            </div>
+          </form>
+        </article>
+
+        <aside class="mortgage-results-card reveal-on-scroll" id="mortgageResults" aria-live="polite">
+          <p class="result-label">Estimated payment</p>
+          <h2>Your projected payment appears here.</h2>
+          <span class="payment-value" id="paymentValue">$—</span>
+          <div class="payment-frequency-label" id="paymentFrequencyLabel">Waiting for your inputs</div>
+
+          <div class="result-stats">
+            <div class="result-stat">
+              <strong>Total paid over term</strong>
+              <span id="totalPaidValue">—</span>
+            </div>
+            <div class="result-stat">
+              <strong>Estimated interest over term</strong>
+              <span id="interestPaidValue">—</span>
+            </div>
+            <div class="result-stat">
+              <strong>Interest type</strong>
+              <span id="interestTypeValue">—</span>
+            </div>
+          </div>
+
+          <p id="mortgageResultNote">Use this estimate as a planning tool. For a more tailored review of your buying budget and next steps, connect with Pinnacle Realty and your mortgage professional.</p>
+
+          <div class="mortgage-results-actions">
+            <a href="contact.html" class="mortgage-btn mortgage-btn-primary">Talk to Pinnacle</a>
+            <a href="buyers.html" class="mortgage-btn mortgage-btn-secondary">Back to Buyers</a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="mortgage-terms-section reveal-on-scroll">
+        <p class="mortgage-section-label">How mortgage payments work</p>
+        <h2>The terms that shape your payment most.</h2>
+        <div class="term-cards">
+          <div class="term-card">
+            <strong>Mortgage amount</strong>
+            <p>The amount you borrow has the biggest impact on your payment size. A higher mortgage means higher payments and more total interest over time.</p>
+          </div>
+          <div class="term-card">
+            <strong>Amortization period</strong>
+            <p>A longer amortization usually lowers each payment but often increases the total interest paid over the life of the mortgage.</p>
+          </div>
+          <div class="term-card">
+            <strong>Payment frequency</strong>
+            <p>Monthly, bi-weekly, and weekly options change how often you pay and how cash flow feels throughout the year.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mortgage-comparison reveal-on-scroll">
+        <p class="mortgage-section-label">Fixed vs variable</p>
+        <h2>Know the difference before you choose.</h2>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <span class="comparison-card-label">Fixed</span>
+            <h3>Steadier payments.</h3>
+            <p>A fixed mortgage keeps the rate consistent during the term, making budgeting simpler and payment expectations easier to manage.</p>
+          </div>
+          <div class="comparison-card">
+            <span class="comparison-card-label">Variable</span>
+            <h3>More market-sensitive.</h3>
+            <p>A variable mortgage may shift with interest rate changes, which can affect either your payment amount or how much goes toward interest.</p>
+          </div>
+          <div class="comparison-card">
+            <span class="comparison-card-label">Decision focus</span>
+            <h3>Choose based on comfort.</h3>
+            <p>The best fit depends on your risk tolerance, monthly flexibility, and how much certainty you want during the term.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mortgage-guidance reveal-on-scroll">
+        <p class="mortgage-section-label">Buyer budgeting guidance</p>
+        <h2>Think beyond just the home price.</h2>
+        <ul class="guidance-list">
+          <li>Get pre-approved before entering the market so you know your likely budget range.</li>
+          <li>Think about what monthly payment feels comfortable, not just what seems technically possible.</li>
+          <li>Leave room for property taxes, insurance, utilities, condo fees, and closing costs.</li>
+          <li>Use the mortgage calculator as a planning tool, then confirm the real numbers with your lender.</li>
+        </ul>
+      </section>
+
+      <section class="mortgage-final-cta reveal-on-scroll">
+        <div>
+          <p class="mortgage-section-label">Next step</p>
+          <h2>Want a clearer idea of what your budget should look like?</h2>
+          <p>Connect with Pinnacle Realty to talk through your search, your comfort range, and how your mortgage numbers fit into the bigger picture of your next move.</p>
+        </div>
+        <div class="mortgage-final-actions">
+          <a href="contact.html" class="mortgage-btn mortgage-btn-primary">Contact Pinnacle</a>
+          <a href="buyers.html" class="mortgage-btn mortgage-btn-secondary">Start Your Search</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
+  <script>
+    (() => {
+      const revealItems = document.querySelectorAll('.reveal-on-scroll');
+      if (revealItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -6% 0px'
+        });
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 30}ms`;
+          observer.observe(item);
+        });
+      }
+
+      const mortgageForm = document.getElementById('mortgageForm');
+      const mortgageReset = document.getElementById('mortgageReset');
+      const paymentValue = document.getElementById('paymentValue');
+      const paymentFrequencyLabel = document.getElementById('paymentFrequencyLabel');
+      const totalPaidValue = document.getElementById('totalPaidValue');
+      const interestPaidValue = document.getElementById('interestPaidValue');
+      const interestTypeValue = document.getElementById('interestTypeValue');
+      const mortgageResultNote = document.getElementById('mortgageResultNote');
+
+      const currency = new Intl.NumberFormat('en-CA', {
+        style: 'currency',
+        currency: 'CAD',
+        maximumFractionDigits: 0
+      });
+
+      const getPeriodsPerYear = (frequency) => {
+        switch (frequency) {
+          case 'monthly': return 12;
+          case 'biweekly':
+          case 'accelerated-biweekly': return 26;
+          case 'weekly':
+          case 'accelerated-weekly': return 52;
+          default: return 12;
+        }
+      };
+
+      const getFrequencyLabel = (frequency) => {
+        switch (frequency) {
+          case 'monthly': return 'Estimated monthly payment';
+          case 'biweekly': return 'Estimated bi-weekly payment';
+          case 'accelerated-biweekly': return 'Estimated accelerated bi-weekly payment';
+          case 'weekly': return 'Estimated weekly payment';
+          case 'accelerated-weekly': return 'Estimated accelerated weekly payment';
+          default: return 'Estimated payment';
+        }
+      };
+
+      const calculatePayment = (principal, annualRate, totalPayments, periodsPerYear) => {
+        const ratePerPeriod = annualRate / periodsPerYear;
+        if (ratePerPeriod === 0) return principal / totalPayments;
+        return principal * (ratePerPeriod * Math.pow(1 + ratePerPeriod, totalPayments)) /
+          (Math.pow(1 + ratePerPeriod, totalPayments) - 1);
+      };
+
+      const updateResults = () => {
+        const amount = Number(document.getElementById('mortgageAmount').value || 0);
+        const amortYears = Number(document.getElementById('amortYears').value || 0);
+        const amortMonths = Number(document.getElementById('amortMonths').value || 0);
+        const frequency = document.getElementById('paymentFrequency').value;
+        const rate = Number(document.getElementById('interestRate').value || 0) / 100;
+        const interestType = document.getElementById('interestType').value;
+        const termYears = Number(document.getElementById('termYears').value || 0);
+        const termMonths = Number(document.getElementById('termMonths').value || 0);
+
+        const amortizationYears = amortYears + amortMonths / 12;
+        const termInYears = termYears + termMonths / 12;
+        const periodsPerYear = getPeriodsPerYear(frequency);
+        const totalPayments = Math.max(1, Math.round(amortizationYears * periodsPerYear));
+        const termPayments = Math.max(1, Math.round(termInYears * periodsPerYear));
+
+        let payment = calculatePayment(amount, rate, totalPayments, periodsPerYear);
+
+        if (frequency === 'accelerated-biweekly') {
+          const monthlyPayment = calculatePayment(amount, rate, Math.max(1, Math.round(amortizationYears * 12)), 12);
+          payment = monthlyPayment / 2;
+        }
+
+        if (frequency === 'accelerated-weekly') {
+          const monthlyPayment = calculatePayment(amount, rate, Math.max(1, Math.round(amortizationYears * 12)), 12);
+          payment = monthlyPayment / 4;
+        }
+
+        const totalPaidTerm = payment * termPayments;
+        const roughInterestTerm = Math.max(0, totalPaidTerm - (amount * (termInYears / Math.max(amortizationYears, termInYears))));
+
+        paymentValue.textContent = currency.format(payment);
+        paymentFrequencyLabel.textContent = getFrequencyLabel(frequency);
+        totalPaidValue.textContent = currency.format(totalPaidTerm);
+        interestPaidValue.textContent = currency.format(roughInterestTerm);
+        interestTypeValue.textContent = interestType.charAt(0).toUpperCase() + interestType.slice(1);
+        mortgageResultNote.textContent = 'This estimate is designed as a planning tool only. Final mortgage details depend on your lender, approval terms, rate structure, and full financing review.';
+      };
+
+      mortgageForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        updateResults();
+      });
+
+      mortgageReset?.addEventListener('click', () => {
+        window.setTimeout(() => {
+          paymentValue.textContent = '$—';
+          paymentFrequencyLabel.textContent = 'Waiting for your inputs';
+          totalPaidValue.textContent = '—';
+          interestPaidValue.textContent = '—';
+          interestTypeValue.textContent = '—';
+          mortgageResultNote.textContent = 'Use this estimate as a planning tool. For a more tailored review of your buying budget and next steps, connect with Pinnacle Realty and your mortgage professional.';
+        }, 0);
+      });
+    })();
+  </script>
 </body>
 </html>

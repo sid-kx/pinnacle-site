@@ -5,17 +5,572 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Get Listing Alerts | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .alerts-page {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(214, 171, 77, 0.14), transparent 22%),
+        radial-gradient(circle at 86% 10%, rgba(214, 171, 77, 0.08), transparent 18%),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 56%, #050505 100%);
+    }
+
+    .alerts-page::before,
+    .alerts-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(18px);
+      opacity: 0.42;
+      animation: alertsFloat 8s ease-in-out infinite;
+    }
+
+    .alerts-page::before {
+      top: 120px;
+      right: -100px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(214,171,77,0.15), transparent 70%);
+    }
+
+    .alerts-page::after {
+      bottom: 180px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(214,171,77,0.10), transparent 72%);
+      animation-delay: -5s;
+    }
+
+    .alerts-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, calc(100% - 56px));
+      margin: 0 auto;
+      padding: 40px 0 96px;
+    }
+
+    .alerts-hero {
+      position: relative;
+      min-height: 78vh;
+      border-radius: 38px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(320px, 0.94fr);
+      align-items: stretch;
+      background:
+        linear-gradient(112deg, rgba(8,8,8,0.82) 12%, rgba(8,8,8,0.42) 46%, rgba(8,8,8,0.86) 100%),
+        radial-gradient(circle at 72% 24%, rgba(214,171,77,0.14), transparent 24%),
+        url('assets/images/vaughn.png') center/cover no-repeat;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 34px 80px rgba(0,0,0,0.42);
+      isolation: isolate;
+    }
+
+    .alerts-hero::before,
+    .alerts-subscribe-card::before,
+    .alerts-benefits::before,
+    .alerts-reassurance::before,
+    .alerts-final-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214,171,77,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .alerts-copy,
+    .alerts-subscribe-card,
+    .alerts-benefit-card,
+    .alerts-reassurance,
+    .alerts-final-cta {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.32s ease, transform 0.32s ease;
+      will-change: transform, opacity;
+    }
+
+    .reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .alerts-copy {
+      position: relative;
+      z-index: 1;
+      padding: 96px 72px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .alerts-kicker,
+    .alerts-section-label,
+    .alerts-side-label,
+    .alerts-success-label {
+      margin: 0 0 18px;
+      font-size: 0.8rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #efc76d;
+    }
+
+    .alerts-title,
+    .alerts-side-heading,
+    .alerts-subscribe-card h2,
+    .alerts-benefit-card h3,
+    .alerts-reassurance h2,
+    .alerts-final-cta h2,
+    .alerts-success-state h3 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 10px 34px rgba(0,0,0,0.34);
+    }
+
+    .alerts-title {
+      font-size: clamp(2.8rem, 4.8vw, 5rem);
+      max-width: 760px;
+    }
+
+    .alerts-title .accent,
+    .alerts-benefit-card strong,
+    .alerts-success-label {
+      color: #efc76d;
+    }
+
+    .alerts-description,
+    .alerts-helper,
+    .alerts-benefit-card p,
+    .alerts-reassurance p,
+    .alerts-final-cta p,
+    .alerts-input,
+    .alerts-input::placeholder,
+    .alerts-note,
+    .alerts-success-state p {
+      color: rgba(245,239,230,0.82);
+      line-height: 1.82;
+      font-size: 1.02rem;
+    }
+
+    .alerts-description {
+      margin: 26px 0 0;
+      max-width: 660px;
+      font-size: 1.06rem;
+      line-height: 1.86;
+    }
+
+    .alerts-actions,
+    .alerts-final-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .alerts-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .alerts-btn-primary {
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      color: #131313;
+      box-shadow: 0 18px 34px rgba(201,152,52,0.18);
+    }
+
+    .alerts-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 38px rgba(201,152,52,0.24);
+    }
+
+    .alerts-btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f5efe6;
+    }
+
+    .alerts-btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .alerts-subscribe-card,
+    .alerts-reassurance,
+    .alerts-final-cta {
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.90), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+      overflow: hidden;
+      margin-top: 26px;
+      padding: 34px 32px;
+    }
+
+    .alerts-subscribe-card h2,
+    .alerts-reassurance h2,
+    .alerts-final-cta h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .alerts-helper {
+      margin: 16px 0 0;
+      max-width: 760px;
+    }
+
+    .alerts-subscribe-form {
+      margin-top: 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .alerts-input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .alerts-input {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #f8f3eb;
+      outline: none;
+      transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .alerts-input::placeholder {
+      color: rgba(245,239,230,0.48);
+    }
+
+    .alerts-input:focus {
+      border-color: rgba(239,199,109,0.28);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 3px rgba(239,199,109,0.08);
+    }
+
+    .alerts-note {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(245,239,230,0.72);
+    }
+
+    .alerts-success-state {
+      display: none;
+      margin-top: 12px;
+      padding: 20px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .alerts-success-state.is-visible {
+      display: block;
+    }
+
+    .alerts-success-state h3 {
+      font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+      text-shadow: none;
+    }
+
+    .alerts-success-state p {
+      margin: 14px 0 0;
+      font-size: 0.98rem;
+    }
+
+    .alerts-benefits {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .alerts-benefit-card {
+      position: relative;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.90), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.24);
+      overflow: hidden;
+      padding: 28px 24px;
+    }
+
+    .alerts-benefit-card strong {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      background: rgba(239,199,109,0.14);
+      border: 1px solid rgba(239,199,109,0.22);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .alerts-benefit-card h3 {
+      font-size: 1.45rem;
+      line-height: 1.08;
+      text-shadow: none;
+    }
+
+    .alerts-benefit-card p {
+      margin: 16px 0 0;
+      font-size: 0.96rem;
+    }
+
+    .alerts-final-cta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+    }
+
+    @keyframes alertsFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -20px, 0); }
+    }
+
+    @media (max-width: 1240px) {
+      .alerts-benefits {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .alerts-hero,
+      .alerts-final-cta {
+        grid-template-columns: 1fr;
+      }
+
+      .alerts-copy {
+        padding: 84px 36px 34px;
+      }
+
+      .alerts-final-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .alerts-shell {
+        width: min(100%, calc(100% - 20px));
+        padding: 24px 0 64px;
+      }
+
+      .alerts-hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .alerts-copy {
+        padding: 70px 22px 24px;
+      }
+
+      .alerts-title {
+        font-size: clamp(2.35rem, 9vw, 3.8rem);
+      }
+
+      .alerts-description,
+      .alerts-side-text,
+      .alerts-helper,
+      .alerts-benefit-card p,
+      .alerts-reassurance p,
+      .alerts-final-cta p,
+      .alerts-input,
+      .alerts-input::placeholder,
+      .alerts-note,
+      .alerts-success-state p {
+        font-size: 0.96rem;
+        line-height: 1.72;
+      }
+
+      .alerts-actions,
+      .alerts-final-actions,
+      .alerts-input-row {
+        flex-direction: column;
+      }
+
+      .alerts-input-row {
+        display: flex;
+      }
+
+      .alerts-btn {
+        width: 100%;
+      }
+
+      .alerts-subscribe-card,
+      .alerts-benefit-card,
+      .alerts-reassurance,
+      .alerts-final-cta {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .alerts-benefits {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body data-page="listing-alerts" data-title="Get Listing Alerts">
   <div id="site-header"></div>
 
-  <main class="blank-main" aria-label="Get Listing Alerts page">
-    <section class="blank-stage">
-      <div class="blank-card" aria-hidden="true"></div>
-    </section>
+  <main class="alerts-page" aria-label="Get Listing Alerts page">
+    <div class="alerts-shell">
+      <section class="alerts-hero">
+        <div class="alerts-copy reveal-on-scroll">
+          <p class="alerts-kicker">Listing alerts</p>
+          <h1 class="alerts-title">Stay connected to what’s <span class="accent">next</span>.</h1>
+          <p class="alerts-description">Subscribe to Pinnacle Realty updates for monthly highlights on listings, market movement, new construction opportunities, and brokerage news. Clean updates only — designed to keep you informed without overloading your inbox.</p>
+          <div class="alerts-actions">
+            <a href="#subscribe-panel" class="alerts-btn alerts-btn-primary">Subscribe Now</a>
+            <a href="contact.html" class="alerts-btn alerts-btn-secondary">Talk to Pinnacle</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="alerts-subscribe-card reveal-on-scroll" id="subscribe-panel">
+        <p class="alerts-section-label">Subscribe</p>
+        <h2>Get Pinnacle updates delivered monthly.</h2>
+        <p class="alerts-helper">Enter your email below to subscribe to monthly updates on featured listings, market movement, new construction opportunities, and brokerage news.</p>
+
+        <form class="alerts-subscribe-form" id="alertsSubscribeForm">
+          <div class="alerts-input-row">
+            <input
+              type="email"
+              id="alertsEmail"
+              class="alerts-input"
+              placeholder="Enter your email address"
+              aria-label="Email address"
+              required
+            />
+            <button type="submit" class="alerts-btn alerts-btn-primary">Subscribe</button>
+          </div>
+          <p class="alerts-note">Monthly updates only. No spam. Unsubscribe anytime.</p>
+        </form>
+
+        <div class="alerts-success-state" id="alertsSuccessState" aria-live="polite">
+          <p class="alerts-success-label">You’re on the list</p>
+          <h3>Monthly Pinnacle updates are on the way.</h3>
+          <p>Your backend can be connected later. For now, this success state confirms the subscription action on the frontend and keeps the page feeling complete.</p>
+        </div>
+      </section>
+
+      <section class="alerts-benefits">
+        <article class="alerts-benefit-card reveal-on-scroll">
+          <strong>01</strong>
+          <h3>Featured listings</h3>
+          <p>See standout properties and fresh opportunities worth watching as new inventory appears.</p>
+        </article>
+
+        <article class="alerts-benefit-card reveal-on-scroll">
+          <strong>02</strong>
+          <h3>Market updates</h3>
+          <p>Get monthly highlights on movement, demand, and trends shaping the market right now.</p>
+        </article>
+
+        <article class="alerts-benefit-card reveal-on-scroll">
+          <strong>03</strong>
+          <h3>New construction news</h3>
+          <p>Stay in touch with new development opportunities and what is coming next across the region.</p>
+        </article>
+
+        <article class="alerts-benefit-card reveal-on-scroll">
+          <strong>04</strong>
+          <h3>Pinnacle insights</h3>
+          <p>Receive guidance, updates, and brokerage highlights designed for buyers, sellers, and market watchers.</p>
+        </article>
+      </section>
+
+      <section class="alerts-reassurance reveal-on-scroll">
+        <p class="alerts-section-label">Simple and focused</p>
+        <h2>Built for buyers, sellers, investors, and anyone watching the market closely.</h2>
+        <p>This page is intentionally simple. One email field, one subscription action, and one clean promise: helpful monthly updates that are easy to follow and relevant to the market you care about.</p>
+      </section>
+
+      <section class="alerts-final-cta reveal-on-scroll">
+        <div>
+          <p class="alerts-section-label">Stay informed</p>
+          <h2>Want monthly market updates without the clutter?</h2>
+          <p>Subscribe to Pinnacle Realty updates and stay closer to listings, market movement, and what’s developing next.</p>
+        </div>
+        <div class="alerts-final-actions">
+          <a href="#subscribe-panel" class="alerts-btn alerts-btn-primary">Subscribe</a>
+          <a href="contact.html" class="alerts-btn alerts-btn-secondary">Contact Pinnacle</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
+  <script>
+    (() => {
+      const revealItems = document.querySelectorAll('.reveal-on-scroll');
+      if (revealItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -6% 0px'
+        });
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 30}ms`;
+          observer.observe(item);
+        });
+      }
+
+      const alertsForm = document.getElementById('alertsSubscribeForm');
+      const alertsEmail = document.getElementById('alertsEmail');
+      const alertsSuccessState = document.getElementById('alertsSuccessState');
+
+      alertsForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        if (!alertsEmail?.value.trim()) {
+          alertsEmail?.focus();
+          return;
+        }
+
+        alertsSuccessState?.classList.add('is-visible');
+        alertsForm.reset();
+      });
+    })();
+  </script>
 </body>
 </html>

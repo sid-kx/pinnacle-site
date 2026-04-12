@@ -5,17 +5,859 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services For Buyers | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .buyer-services-page {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(214, 171, 77, 0.14), transparent 22%),
+        radial-gradient(circle at 86% 10%, rgba(214, 171, 77, 0.08), transparent 18%),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 56%, #050505 100%);
+    }
+
+    .buyer-services-page::before,
+    .buyer-services-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      filter: blur(18px);
+      opacity: 0.42;
+      animation: buyerServicesFloat 8s ease-in-out infinite;
+    }
+
+    .buyer-services-page::before {
+      top: 120px;
+      right: -100px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(214,171,77,0.15), transparent 70%);
+    }
+
+    .buyer-services-page::after {
+      bottom: 180px;
+      left: -120px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(214,171,77,0.10), transparent 72%);
+      animation-delay: -5s;
+    }
+
+    .buyer-services-shell {
+      position: relative;
+      z-index: 1;
+      width: min(1360px, calc(100% - 56px));
+      margin: 0 auto;
+      padding: 40px 0 96px;
+    }
+
+    .buyer-services-hero {
+      position: relative;
+      min-height: 82vh;
+      border-radius: 38px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      align-items: stretch;
+      background:
+        linear-gradient(112deg, rgba(8,8,8,0.82) 12%, rgba(8,8,8,0.42) 46%, rgba(8,8,8,0.86) 100%),
+        radial-gradient(circle at 72% 24%, rgba(214,171,77,0.14), transparent 24%),
+        url('assets/images/sauga2.jpg') center/cover no-repeat;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 34px 80px rgba(0,0,0,0.42);
+      isolation: isolate;
+    }
+
+    .buyer-services-hero::before,
+    .buyer-service-card::before,
+    .buyer-journey-section::before,
+    .buyer-advantage-section::before,
+    .buyer-mls-section::before,
+    .buyer-profile-builder::before,
+    .buyer-final-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214,171,77,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .buyer-hero-copy,
+    .buyer-service-card,
+    .buyer-advantage-text,
+    .buyer-advantage-panel,
+    .buyer-mls-section,
+    .buyer-profile-builder,
+    .buyer-final-cta {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.32s ease, transform 0.32s ease;
+      will-change: transform, opacity;
+    }
+
+    .reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .buyer-hero-copy {
+      position: relative;
+      z-index: 1;
+      padding: 96px 72px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .buyer-kicker,
+    .buyer-section-label,
+    .buyer-side-label,
+    .buyer-profile-label,
+    .journey-mini-label,
+    .advantage-panel-label {
+      margin: 0 0 18px;
+      font-size: 0.8rem;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: #efc76d;
+    }
+
+    .buyer-hero-title,
+    .buyer-side-heading,
+    .buyer-service-card h3,
+    .buyer-journey-section h2,
+    .buyer-advantage-text h2,
+    .buyer-advantage-panel h3,
+    .buyer-mls-section h2,
+    .buyer-profile-builder h2,
+    .buyer-final-cta h2,
+    .profile-result-title {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 10px 34px rgba(0,0,0,0.34);
+    }
+
+    .buyer-hero-title {
+      font-size: clamp(2.5rem, 4.4vw, 4.7rem);
+      max-width: 760px;
+    }
+
+    .buyer-hero-title .accent,
+    .buyer-service-index,
+    .profile-highlight,
+    .journey-step-number {
+      color: #efc76d;
+    }
+
+    .buyer-hero-description,
+    .buyer-side-text,
+    .buyer-service-card p,
+    .buyer-journey-intro,
+    .journey-step-copy,
+    .buyer-advantage-text p,
+    .buyer-advantage-panel p,
+    .buyer-mls-section p,
+    .buyer-profile-builder p,
+    .buyer-final-cta p,
+    .profile-result-copy,
+    .profile-summary-list li,
+    .profile-note,
+    .buyer-field label {
+      color: rgba(245,239,230,0.82);
+      line-height: 1.82;
+      font-size: 1.02rem;
+    }
+
+    .buyer-hero-description {
+      margin: 26px 0 0;
+      max-width: 660px;
+      font-size: 1.06rem;
+      line-height: 1.86;
+    }
+
+    .buyer-actions,
+    .buyer-final-actions,
+    .buyer-profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .buyer-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .buyer-btn-primary {
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      color: #131313;
+      box-shadow: 0 18px 34px rgba(201,152,52,0.18);
+    }
+
+    .buyer-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 22px 38px rgba(201,152,52,0.24);
+    }
+
+    .buyer-btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #f5efe6;
+    }
+
+    .buyer-btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+
+    .buyer-services-grid {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .buyer-service-card,
+    .buyer-advantage-section,
+    .buyer-mls-section,
+    .buyer-profile-builder,
+    .buyer-final-cta {
+      position: relative;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,10,10,0.90), rgba(8,8,8,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+
+    .buyer-service-card {
+      padding: 30px 28px;
+      cursor: pointer;
+      transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+    }
+
+    .buyer-service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(239,199,109,0.18);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.34);
+      background: linear-gradient(180deg, rgba(12,12,12,0.92), rgba(8,8,8,0.98));
+    }
+
+    .buyer-service-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      background: rgba(239,199,109,0.14);
+      border: 1px solid rgba(239,199,109,0.22);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .buyer-service-card h3 {
+      font-size: 1.6rem;
+      line-height: 1.08;
+      text-shadow: none;
+    }
+
+    .buyer-service-card p {
+      margin: 16px 0 0;
+      font-size: 0.96rem;
+    }
+
+    .buyer-service-extra {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.34s ease, opacity 0.26s ease, margin-top 0.26s ease;
+      margin-top: 0;
+    }
+
+    .buyer-service-card.active .buyer-service-extra {
+      max-height: 220px;
+      opacity: 1;
+      margin-top: 16px;
+    }
+
+    .buyer-service-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      color: rgba(239,199,109,0.92);
+      font-size: 0.76rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .buyer-service-toggle::after {
+      content: "+";
+      font-size: 1rem;
+      transition: transform 0.24s ease;
+    }
+
+    .buyer-service-card.active .buyer-service-toggle::after {
+      transform: rotate(45deg);
+    }
+
+    .buyer-mls-section,
+    .buyer-profile-builder,
+    .buyer-final-cta {
+      margin-top: 26px;
+      padding: 34px 32px;
+    }
+
+    .buyer-advantage-text h2,
+    .buyer-mls-section h2,
+    .buyer-profile-builder h2,
+    .buyer-final-cta h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+
+    .buyer-advantage-section {
+      margin-top: 26px;
+      padding: 34px 32px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.88fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .buyer-advantage-text p {
+      margin: 16px 0 0;
+      max-width: 720px;
+    }
+
+    .buyer-advantage-panel {
+      position: relative;
+      padding: 28px 26px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .buyer-advantage-panel h3 {
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      line-height: 1.06;
+      text-shadow: none;
+    }
+
+    .buyer-advantage-panel p {
+      margin: 16px 0 0;
+    }
+
+    .buyer-advantage-list {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .buyer-advantage-list li {
+      display: flex;
+      gap: 12px;
+      color: rgba(245,239,230,0.82);
+      line-height: 1.7;
+    }
+
+    .buyer-advantage-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-top: 10px;
+      background: linear-gradient(180deg, rgba(239,199,109,0.95), rgba(214,171,77,0.92));
+      box-shadow: 0 0 10px rgba(214,171,77,0.34);
+      flex: 0 0 auto;
+    }
+
+    .mls-preview-box {
+      margin-top: 24px;
+      padding: 26px 24px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: grid;
+      gap: 12px;
+    }
+
+    .mls-preview-box strong {
+      color: #efc76d;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .mls-preview-box span {
+      color: #f8f3eb;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+      line-height: 1.06;
+    }
+
+    .buyer-profile-grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .buyer-profile-form,
+    .buyer-profile-result {
+      padding: 24px 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .buyer-profile-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .buyer-field {
+      display: grid;
+      gap: 10px;
+    }
+
+    .buyer-field label {
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .buyer-field input,
+    .buyer-field select {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #f8f3eb;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .buyer-field input:focus,
+    .buyer-field select:focus {
+      border-color: rgba(239,199,109,0.28);
+      background: rgba(255,255,255,0.05);
+      box-shadow: 0 0 0 3px rgba(239,199,109,0.08);
+    }
+
+    .buyer-profile-result {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .profile-result-title {
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      line-height: 1.06;
+      text-shadow: none;
+    }
+
+    .profile-result-copy {
+      margin: 16px 0 0;
+      font-size: 0.98rem;
+    }
+
+    .profile-summary-list {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-note {
+      margin: 18px 0 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: rgba(245,239,230,0.72);
+    }
+
+    .buyer-final-cta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+    }
+
+    @keyframes buyerServicesFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -20px, 0); }
+    }
+
+    @media (max-width: 1120px) {
+      .buyer-services-hero,
+      .buyer-advantage-section,
+      .buyer-profile-grid,
+      .buyer-final-cta {
+        grid-template-columns: 1fr;
+      }
+
+      .buyer-hero-copy {
+        padding: 84px 36px 34px;
+      }
+
+      .buyer-final-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .buyer-services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .buyer-services-shell {
+        width: min(100%, calc(100% - 20px));
+        padding: 24px 0 64px;
+      }
+
+      .buyer-services-hero {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+      }
+
+      .buyer-hero-copy {
+        padding: 70px 22px 24px;
+      }
+
+      .buyer-hero-title {
+        font-size: clamp(2.35rem, 9vw, 3.8rem);
+      }
+
+      .buyer-hero-description,
+      .buyer-service-card p,
+      .buyer-advantage-text p,
+      .buyer-advantage-panel p,
+      .buyer-mls-section p,
+      .buyer-profile-builder p,
+      .buyer-final-cta p,
+      .profile-result-copy,
+      .profile-summary-list li,
+      .profile-note,
+      .buyer-field label {
+        font-size: 0.96rem;
+        line-height: 1.72;
+      }
+
+      .buyer-actions,
+      .buyer-final-actions,
+      .buyer-profile-actions {
+        flex-direction: column;
+      }
+
+      .buyer-btn {
+        width: 100%;
+      }
+
+      .buyer-service-card,
+      .buyer-advantage-section,
+      .buyer-mls-section,
+      .buyer-profile-builder,
+      .buyer-final-cta {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+    }
+  </style>
 </head>
 <body data-page="services-buyers" data-title="Services For Buyers">
   <div id="site-header"></div>
 
-  <main class="blank-main" aria-label="Services For Buyers page">
-    <section class="blank-stage">
-      <div class="blank-card" aria-hidden="true"></div>
-    </section>
+  <main class="buyer-services-page" aria-label="Services For Buyers page">
+    <div class="buyer-services-shell">
+      <section class="buyer-services-hero">
+        <div class="buyer-hero-copy reveal-on-scroll">
+          <p class="buyer-kicker">Services for buyers</p>
+          <h1 class="buyer-hero-title">A smarter way to <span class="accent">buy</span> — not just a faster one.</h1>
+          <p class="buyer-hero-description">Buying a home should feel clear, strategic, and well supported. Pinnacle Realty helps buyers navigate search, showings, offer decisions, and closing with stronger guidance and a better sense of fit from the start.</p>
+          <div class="buyer-actions">
+            <a href="contact.html" class="buyer-btn buyer-btn-primary">Book a Buyer Consultation</a>
+            <a href="listing-alerts.html" class="buyer-btn buyer-btn-secondary">Get Listing Alerts</a>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="buyer-services-grid">
+        <article class="buyer-service-card reveal-on-scroll active" data-buyer-service-card>
+          <span class="buyer-service-index">01</span>
+          <h3>Search strategy</h3>
+          <p>Buying starts with narrowing the field. A stronger search focuses on the homes most aligned with budget, lifestyle, and long-term fit.</p>
+          <div class="buyer-service-extra">
+            <p>Pinnacle Realty helps refine the process so buyers are not wasting time on listings that look good online but miss the mark in person, on value, or on timing.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+
+        <article class="buyer-service-card reveal-on-scroll" data-buyer-service-card>
+          <span class="buyer-service-index">02</span>
+          <h3>Market insight</h3>
+          <p>Neighborhoods, pricing patterns, and market pace shape how buyers should move and when a home deserves stronger attention.</p>
+          <div class="buyer-service-extra">
+            <p>Better market context helps buyers compare homes more intelligently and understand whether a listing is attractively positioned, fairly priced, or likely to become competitive quickly.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+
+        <article class="buyer-service-card reveal-on-scroll" data-buyer-service-card>
+          <span class="buyer-service-index">03</span>
+          <h3>Showings & evaluation</h3>
+          <p>Walking through a home is not just about liking a space. It is about knowing what to notice and what questions to ask.</p>
+          <div class="buyer-service-extra">
+            <p>From layout and condition to neighborhood feel and resale potential, buyers get support that helps showings become more useful and less overwhelming.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+
+        <article class="buyer-service-card reveal-on-scroll" data-buyer-service-card>
+          <span class="buyer-service-index">04</span>
+          <h3>Offer strategy</h3>
+          <p>When the right home appears, the offer should feel intentional rather than rushed. Price is only one part of the decision.</p>
+          <div class="buyer-service-extra">
+            <p>Offer structure, timing, conditions, flexibility, and competitiveness all matter. The goal is to move strongly without losing clarity or overextending unnecessarily.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+
+        <article class="buyer-service-card reveal-on-scroll" data-buyer-service-card>
+          <span class="buyer-service-index">05</span>
+          <h3>Negotiation support</h3>
+          <p>Negotiation is where confidence and preparation begin to matter most. Buyers need a calm, informed approach when terms begin to shift.</p>
+          <div class="buyer-service-extra">
+            <p>Pinnacle Realty supports buyers through counteroffers, conditions, and decision points so the process feels more strategic and less reactive.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+
+        <article class="buyer-service-card reveal-on-scroll" data-buyer-service-card>
+          <span class="buyer-service-index">06</span>
+          <h3>Closing guidance</h3>
+          <p>The final stage still deserves support. Clear communication and organized follow-through help keep the transition smooth.</p>
+          <div class="buyer-service-extra">
+            <p>From accepted offer to closing day, buyers benefit from guidance that keeps the process more understandable and easier to navigate with confidence.</p>
+          </div>
+          <span class="buyer-service-toggle">Tap to explore</span>
+        </article>
+      </section>
+
+
+      <section class="buyer-advantage-section">
+        <div class="buyer-advantage-text reveal-on-scroll">
+          <p class="buyer-section-label">Buyer advantage</p>
+          <h2>Clarity beats pressure. Every time.</h2>
+          <p>The best buyer decisions are not rushed ones. They come from stronger comparisons, clearer priorities, and a better understanding of what makes a home feel right in both the short term and the long term.</p>
+          <p>Pinnacle Realty helps buyers slow down where it matters, move decisively when the timing is right, and avoid letting excitement replace strategy.</p>
+        </div>
+
+        <aside class="buyer-advantage-panel reveal-on-scroll" aria-label="Buyer advantage panel">
+          <p class="advantage-panel-label">What that means</p>
+          <h3>Support built around stronger decisions.</h3>
+          <p>Buyers are guided through the process with a focus on fit, timing, and negotiation strength rather than unnecessary pressure.</p>
+          <ul class="buyer-advantage-list">
+            <li>No rushed decisions</li>
+            <li>Better property comparisons</li>
+            <li>Strategic offer timing</li>
+            <li>More confident next steps</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="buyer-mls-section reveal-on-scroll">
+        <p class="buyer-section-label">Future search tools</p>
+        <h2>Coming soon — smarter MLS-powered home search.</h2>
+        <p>As Pinnacle Realty expands its connected buyer experience, this section will bring listings, filters, alerts, and guided search together in a more polished way — making discovery feel faster, clearer, and more aligned with buyer priorities.</p>
+        <div class="mls-preview-box">
+          <strong>Coming soon</strong>
+          <span>Integrated MLS listings, cleaner search, and smarter discovery tools.</span>
+        </div>
+      </section>
+
+      <section class="buyer-profile-builder reveal-on-scroll">
+        <p class="buyer-profile-label">Buyer profile builder</p>
+        <h2>Build your search profile.</h2>
+        <p>Use this quick builder to shape a clearer picture of what you are looking for. The result below updates instantly to summarize your current priorities and how Pinnacle Realty can guide the search.</p>
+
+        <div class="buyer-profile-grid">
+          <form class="buyer-profile-form" id="buyerProfileForm">
+            <div class="buyer-field">
+              <label for="budgetRange">Budget range</label>
+              <select id="budgetRange" name="budgetRange">
+                <option value="under $700K">Under $700K</option>
+                <option value="$700K – $1M" selected>$700K – $1M</option>
+                <option value="$1M – $1.5M">$1M – $1.5M</option>
+                <option value="$1.5M+">$1.5M+</option>
+              </select>
+            </div>
+
+            <div class="buyer-field">
+              <label for="propertyPreference">Property type</label>
+              <select id="propertyPreference" name="propertyPreference">
+                <option value="condos">Condo</option>
+                <option value="townhomes" selected>Townhome</option>
+                <option value="detached homes">Detached home</option>
+                <option value="semi-detached homes">Semi-detached home</option>
+              </select>
+            </div>
+
+            <div class="buyer-field">
+              <label for="areaPreference">Preferred area</label>
+              <select id="areaPreference" name="areaPreference">
+                <option value="Mississauga">Mississauga</option>
+                <option value="Brampton">Brampton</option>
+                <option value="Vaughan">Vaughan</option>
+                <option value="Toronto" selected>Toronto</option>
+                <option value="Oakville">Oakville</option>
+                <option value="Milton">Milton</option>
+              </select>
+            </div>
+
+            <div class="buyer-field">
+              <label for="buyerPriority">Top priority</label>
+              <select id="buyerPriority" name="buyerPriority">
+                <option value="short commute">Short commute</option>
+                <option value="family space" selected>Family space</option>
+                <option value="investment upside">Investment upside</option>
+                <option value="modern finishes">Modern finishes</option>
+                <option value="walkable lifestyle">Walkable lifestyle</option>
+              </select>
+            </div>
+
+            <div class="buyer-profile-actions">
+              <button type="button" class="buyer-btn buyer-btn-primary" id="buildProfileButton">Build My Buyer Profile</button>
+              <a href="contact.html" class="buyer-btn buyer-btn-secondary">Discuss My Search</a>
+            </div>
+          </form>
+
+          <div class="buyer-profile-result" id="buyerProfileResult">
+            <h3 class="profile-result-title">You’re looking for a <span class="profile-highlight">well-matched</span> next move.</h3>
+            <p class="profile-result-copy">Build your profile to see a clearer summary of the kind of home and search strategy that currently fits your priorities.</p>
+            <ul class="profile-summary-list">
+              <li>Set your budget range</li>
+              <li>Choose your preferred property type</li>
+              <li>Pick the area you want to focus on</li>
+              <li>Select the factor that matters most right now</li>
+            </ul>
+            <p class="profile-note">This is a quick guidance tool — not a hard filter. Pinnacle Realty can help turn this profile into a more refined search strategy.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="buyer-final-cta reveal-on-scroll">
+        <div>
+          <p class="buyer-section-label">Start with clarity</p>
+          <h2>Ready to move through your search with more confidence and less pressure?</h2>
+          <p>Connect with Pinnacle Realty to talk through your priorities, your budget, your target areas, and what a stronger buying strategy should look like for your next move.</p>
+        </div>
+        <div class="buyer-final-actions">
+          <a href="contact.html" class="buyer-btn buyer-btn-primary">Book a Consultation</a>
+          <a href="listing-alerts.html" class="buyer-btn buyer-btn-secondary">Get Listing Alerts</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
+  <script>
+    (() => {
+      const revealItems = document.querySelectorAll('.reveal-on-scroll');
+      if (revealItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -6% 0px'
+        });
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 30}ms`;
+          observer.observe(item);
+        });
+      }
+
+      const buyerServiceCards = document.querySelectorAll('[data-buyer-service-card]');
+      buyerServiceCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          const isActive = card.classList.contains('active');
+          buyerServiceCards.forEach((item) => item.classList.remove('active'));
+          if (!isActive) card.classList.add('active');
+        });
+      });
+
+
+      const buildProfileButton = document.getElementById('buildProfileButton');
+      const budgetRange = document.getElementById('budgetRange');
+      const propertyPreference = document.getElementById('propertyPreference');
+      const areaPreference = document.getElementById('areaPreference');
+      const buyerPriority = document.getElementById('buyerPriority');
+      const buyerProfileResult = document.getElementById('buyerProfileResult');
+
+      buildProfileButton?.addEventListener('click', () => {
+        const budget = budgetRange?.value || '$700K – $1M';
+        const property = propertyPreference?.value || 'townhomes';
+        const area = areaPreference?.value || 'Toronto';
+        const priority = buyerPriority?.value || 'family space';
+
+        buyerProfileResult.innerHTML = `
+          <h3 class="profile-result-title">You’re looking for <span class="profile-highlight">${property}</span> in <span class="profile-highlight">${area}</span>.</h3>
+          <p class="profile-result-copy">Based on your current inputs, your search is centred around a budget of <span class="profile-highlight">${budget}</span> with a stronger focus on <span class="profile-highlight">${priority}</span>.</p>
+          <ul class="profile-summary-list">
+            <li>Your profile suggests a search that should stay focused on properties aligned with ${priority}.</li>
+            <li>${area} appears to be the area you want to prioritize first before broadening the search.</li>
+            <li>${property.charAt(0).toUpperCase() + property.slice(1)} may offer the best starting point for refining viewings and comparisons.</li>
+            <li>Pinnacle Realty can help turn this into a more tailored shortlist and search strategy.</li>
+          </ul>
+          <p class="profile-note">This buyer profile is a starting point designed to shape the conversation. For a more refined search plan, connect directly with Pinnacle Realty.</p>
+        `;
+      });
+    })();
+  </script>
 </body>
 </html>
