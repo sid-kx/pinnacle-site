@@ -6,6 +6,9 @@
   <title>Property Evaluation | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     .evaluation-page {
       position: relative;
       overflow: hidden;
@@ -23,7 +26,7 @@
       pointer-events: none;
       filter: blur(18px);
       opacity: 0.42;
-      animation: evaluationFloat 15s ease-in-out infinite;
+      animation: evaluationFloat 10s ease-in-out infinite;
     }
 
     .evaluation-page::before {
@@ -86,8 +89,8 @@
     .evaluation-info-card,
     .evaluation-disclaimer {
       opacity: 0;
-      transform: translateY(34px);
-      transition: opacity 0.95s ease, transform 0.95s ease;
+      transform: translateY(24px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
       will-change: transform, opacity;
     }
 
@@ -713,7 +716,7 @@
         });
 
         revealItems.forEach((item, index) => {
-          item.style.transitionDelay = `${index * 90}ms`;
+          item.style.transitionDelay = `${index * 45}ms`;
           observer.observe(item);
         });
       }

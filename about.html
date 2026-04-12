@@ -7,6 +7,9 @@
 </head>
   <link rel="stylesheet" href="styles.css" />
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     .about-page {
       position: relative;
       overflow: hidden;
@@ -25,7 +28,7 @@
       pointer-events: none;
       filter: blur(16px);
       opacity: 0.45;
-      animation: aboutFloat 14s ease-in-out infinite;
+      animation: aboutFloat 22s ease-in-out infinite;
     }
 
     .about-page::before {
@@ -87,7 +90,7 @@
     .cta-banner {
       opacity: 0;
       transform: translateY(34px);
-      transition: opacity 0.9s ease, transform 0.9s ease;
+      transition: opacity 1.45s ease, transform 1.45s ease;
       will-change: transform, opacity;
     }
 
@@ -439,11 +442,22 @@
       .about-actions,
       .cta-links {
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
       }
 
       .about-btn,
       .cta-links .about-btn {
+        width: min(100%, 420px);
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-banner > div:last-child {
         width: 100%;
+        display: flex;
+        justify-content: center;
       }
 
       .about-highlight-panel {
@@ -544,7 +558,6 @@
           <p>Browse the agents page, discover new construction opportunities, or connect directly to start your next real estate conversation.</p>
         </div>
         <div class="cta-links">
-          <a href="management.html" class="about-btn about-btn-secondary">Management</a>
           <a href="buyers.html" class="about-btn about-btn-secondary">For Buyers</a>
           <a href="sellers.html" class="about-btn about-btn-secondary">For Sellers</a>
           <a href="contact.html" class="about-btn about-btn-primary">Contact Pinnacle</a>
@@ -573,7 +586,7 @@
       });
 
       revealItems.forEach((item, index) => {
-        item.style.transitionDelay = `${index * 90}ms`;
+        item.style.transitionDelay = `${index * 180}ms`;
         observer.observe(item);
       });
     })();

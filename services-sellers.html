@@ -24,7 +24,7 @@
       pointer-events: none;
       filter: blur(18px);
       opacity: 0.42;
-      animation: sellerServicesFloat 15s ease-in-out infinite;
+      animation: sellerServicesFloat 10s ease-in-out infinite;
     }
 
     .seller-services-page::before {
@@ -87,8 +87,8 @@
     .services-faq,
     .services-final-cta {
       opacity: 0;
-      transform: translateY(34px);
-      transition: opacity 0.95s ease, transform 0.95s ease;
+      transform: translateY(24px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
       will-change: transform, opacity;
     }
 
@@ -666,7 +666,7 @@
         });
 
         revealItems.forEach((item, index) => {
-          item.style.transitionDelay = `${index * 90}ms`;
+          item.style.transitionDelay = `${index * 45}ms`;
           observer.observe(item);
         });
       }

@@ -23,7 +23,7 @@
       pointer-events: none;
       filter: blur(18px);
       opacity: 0.42;
-      animation: sellersFloat 16s ease-in-out infinite;
+      animation: sellersFloat 10s ease-in-out infinite;
     }
 
     .sellers-page::before {
@@ -85,11 +85,10 @@
     .seller-services-card,
     .seller-process,
     .seller-marketing,
-    .seller-evaluation,
     .seller-final-cta {
       opacity: 0;
-      transform: translateY(34px);
-      transition: opacity 0.95s ease, transform 0.95s ease;
+      transform: translateY(24px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
       will-change: transform, opacity;
     }
 
@@ -336,7 +335,6 @@
     }
 
     .seller-marketing,
-    .seller-evaluation,
     .seller-final-cta {
       margin-top: 26px;
       padding: 34px 32px;
@@ -600,25 +598,6 @@
         </div>
       </section>
 
-      <section class="seller-evaluation reveal-on-scroll">
-        <p class="section-label">Property evaluation</p>
-        <h2>Start with a clearer view of your home’s market position.</h2>
-        <div class="seller-evaluation-grid">
-          <div>
-            <p>Before a listing goes live, strategy matters. A property evaluation helps create a more informed starting point by looking at location, property type, condition, local activity, and how the home should be introduced to the market.</p>
-            <p>Whether you are ready to sell soon or just starting to plan, a tailored evaluation offers more clarity than a generic estimate.</p>
-          </div>
-          <div class="seller-evaluation-stat">
-            <strong>Next step</strong>
-            <h3>Request a tailored evaluation.</h3>
-            <p>Take the next step toward pricing, preparation, and a more confident launch by visiting the Property Evaluation page.</p>
-            <div class="sellers-actions">
-              <a href="property-evaluation.html" class="seller-btn seller-btn-primary">Request Evaluation</a>
-              <a href="services-sellers.html" class="seller-btn seller-btn-secondary">View Seller Services</a>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section class="seller-final-cta reveal-on-scroll">
         <div>
@@ -654,7 +633,7 @@
       });
 
       revealItems.forEach((item, index) => {
-        item.style.transitionDelay = `${index * 90}ms`;
+        item.style.transitionDelay = `${index * 45}ms`;
         observer.observe(item);
       });
     })();
