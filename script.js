@@ -4,6 +4,7 @@ const navConfig = [
       { title: 'About', href: 'about.html', key: 'about' },
       { title: 'Management', href: 'management.html', key: 'management' },
       { title: 'Agents', href: 'agents.html', key: 'agents' },
+      { title: 'Agents Login', href: 'https://portal.pinnaclerealty.ca', key: 'agents-login' },
     ]
   },
   {
@@ -34,6 +35,7 @@ const footerColumns = [
       ['About', 'about.html'],
       ['Management', 'management.html'],
       ['Agents', 'agents.html'],
+      ['Agents Login', 'https://portal.pinnaclerealty.ca'],
     ]
   },
   {
@@ -85,7 +87,7 @@ function createNav() {
 
     const submenu = item.children.map((child) => {
       const childActive = child.key === pageKey ? 'active' : '';
-      return `<a class="submenu-link ${childActive}" href="${child.href}">${child.title}</a>`;
+      return `<a class="submenu-link ${childActive}" href="${child.href}"${child.href.startsWith('https://') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${child.title}</a>`;
     }).join('');
 
     return `
@@ -101,7 +103,9 @@ function createNav() {
       <div class="nav-backdrop"></div>
       <nav class="navbar" id="navbar">
         <div class="container navbar-inner">
-          <a href="index.html" class="navbar-logo brand" aria-label="Pinnacle Realty home">PINN<span class="logo-lambda">Λ</span>CLE</a>
+          <a href="index.html" class="navbar-logo brand" aria-label="Pinnacle Realty home">
+            <img src="assets/images/pinnacle-logo.png" alt="Pinnacle Realty" class="navbar-logo-img" />
+          </a>
 
           <div class="nav-links" id="navLinks">
             ${navHtml}
@@ -243,7 +247,9 @@ function createFooter() {
         <div class="footer-main">
           ${columnsHtml}
           <div class="footer-brand-area">
-            <div class="footer-logo">PINN<span class="logo-lambda">Λ</span>CLE</div>
+            <div class="footer-logo">
+              <img src="assets/images/pinnacle-logo.png" alt="Pinnacle Realty" class="footer-logo-img" />
+            </div>
             <p class="footer-copy">Modern presentation. Elevated service.</p>
           </div>
         </div>
@@ -254,7 +260,7 @@ function createFooter() {
           <a href="https://www.linkedin.com/company/pinnaclerealtyca/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
             <img src="assets/images/linkedin-logo.jpg" alt="LinkedIn" class="social-icon-img" />
           </a>
-          <a href="https://x.com/JagSaini1" class="social-icon" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+          <a href="https://x.com/Pinnacle905_AI" class="social-icon" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
             <img src="assets/images/twitter-logo.jpg" alt="Twitter" class="social-icon-img" />
           </a>
           <a href="https://www.youtube.com/@PinnacleRealty905" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
@@ -386,3 +392,41 @@ function createFooter() {
 
 createNav();
 createFooter();
+
+// Logo sizing fix
+const style = document.createElement('style');
+style.innerHTML = `
+  .navbar-logo-img {
+    height: 46px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-logo-img {
+      height: 28px;
+    }
+  }
+
+  .footer-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .footer-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: brightness(0.95) saturate(0.9);
+    display: block;
+    margin: 0 auto;
+  }
+
+  .footer-brand-area {
+    text-align: center;
+  }
+`;
+document.head.appendChild(style);
