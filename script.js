@@ -21,7 +21,7 @@ const navConfig = [
       { title: 'Get Listing Alerts', href: 'listing-alerts.html', key: 'listing-alerts' },
     ]
   },
-  { title: 'LISTINGS', href: 'listing-alerts.html', key: 'listing-alerts' },
+  { title: 'LISTINGS', href: 'listings.html', key: 'listings' },
   { title: 'NEW CONSTRUCTION', href: 'new-construction.html', key: 'new-construction' },
   { title: 'MEDIA', href: 'media.html', key: 'media' },
   { title: 'CONTACT', href: 'contact.html', key: 'contact' },
