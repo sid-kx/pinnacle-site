@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Management | Pinnacle Realty</title>
@@ -276,6 +273,164 @@
       max-width: 680px;
     }
 
+    .broker-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #efc76d;
+      font-size: 0.84rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .broker-read-more:hover {
+      transform: translateX(3px);
+      opacity: 0.96;
+    }
+
+    .broker-socials {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 18px;
+    }
+
+    .broker-social-link {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 1px solid hsla(40, 20%, 18%, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: hsla(0, 0%, 4%, 0.95);
+      overflow: hidden;
+      flex: 0 0 auto;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .broker-social-link:hover {
+      transform: translateY(-2px);
+      border-color: hsla(40, 60%, 50%, 0.35);
+      box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.24);
+    }
+
+    .broker-social-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .management-bio-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .management-bio-modal.is-open {
+      display: flex;
+    }
+
+    .management-bio-dialog {
+      position: relative;
+      width: min(920px, 100%);
+      max-height: min(86vh, 920px);
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(10,10,10,0.97), rgba(8,8,8,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 28px 90px rgba(0,0,0,0.45);
+    }
+
+    .management-bio-dialog::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214,171,77,0.08), transparent 24%);
+      pointer-events: none;
+    }
+
+    .management-bio-scroll {
+      position: relative;
+      z-index: 1;
+      max-height: min(86vh, 920px);
+      padding: 34px 32px 30px;
+    }
+
+    .management-bio-close {
+      position: sticky;
+      top: 0;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #f8f3eb;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.22s ease, background 0.22s ease;
+      z-index: 2;
+    }
+
+    .management-bio-close:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .management-bio-header {
+      margin-top: 18px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .management-bio-header .broker-label {
+      margin-bottom: 12px;
+    }
+
+    .management-bio-title {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 1.02;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 10px 34px rgba(0,0,0,0.34);
+    }
+
+    .management-bio-body {
+      margin-top: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .management-bio-body p {
+      margin: 0;
+      color: rgba(245,239,230,0.84);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
     .broker-contact-grid {
       margin-top: 30px;
       display: grid;
@@ -440,6 +595,10 @@
       .contact-banner-actions {
         justify-content: flex-start;
       }
+
+      .broker-contact-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 820px) {
@@ -458,28 +617,56 @@
 
       .management-copy {
         padding: 70px 22px 24px;
+        text-align: center;
+        align-items: center;
+      }
+      .management-kicker,
+      .management-scroll-note {
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
       }
 
       .management-title {
-        font-size: clamp(2.4rem, 9vw, 3.8rem);
+        font-size: clamp(1.7rem, 6.2vw, 2.6rem);
+        max-width: 100%;
+        word-break: normal;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        line-height: 1.05;
       }
 
-      .management-description,
+      .management-description {
+        margin-top: 18px;
+        font-size: 0.92rem;
+        line-height: 1.7;
+        max-width: 100%;
+        word-break: normal;
+        overflow-wrap: break-word;
+      }
+
       .broker-copy > p,
       .contact-banner p {
         font-size: 0.96rem;
         line-height: 1.72;
+        max-width: 100%;
+        word-break: normal;
+        overflow-wrap: break-word;
       }
 
       .management-side-card {
-        margin: 0 22px 22px;
+        margin: 0 auto 22px;
         padding: 24px 20px;
         border-radius: 24px;
+        text-align: center;
+        max-width: 92%;
+      }
+      .management-side-card p {
+        text-align: center;
       }
 
-      .broker-image-wrap {
-        min-height: 460px;
-        border-radius: 24px;
+      .transaction-image-wrap {
+        display: none;
       }
 
       .broker-copy,
@@ -488,7 +675,8 @@
         border-radius: 24px;
       }
 
-      .broker-contact-grid {
+      .broker-contact-grid,
+      .transaction-contact-grid {
         grid-template-columns: 1fr;
       }
 
@@ -499,6 +687,468 @@
 
       .management-btn {
         width: 100%;
+      }
+      .broker-social-link {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+      }
+
+      .management-bio-scroll {
+        max-height: min(86vh, 920px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(239,199,109,0.55) rgba(255,255,255,0.06);
+      }
+
+      .management-bio-scroll::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      .management-bio-scroll::-webkit-scrollbar-track {
+        background: rgba(255,255,255,0.05);
+      }
+
+      .management-bio-scroll::-webkit-scrollbar-thumb {
+        background: rgba(239,199,109,0.55);
+        border-radius: 999px;
+      }
+    }
+    .transaction-copy,
+    .transaction-image-wrap {
+      opacity: 0;
+      transition: opacity 0.95s ease, transform 0.95s ease;
+      will-change: transform, opacity;
+    }
+
+    .marketing-copy,
+    .marketing-image-wrap {
+      opacity: 0;
+      transition: opacity 0.95s ease, transform 0.95s ease;
+      will-change: transform, opacity;
+    }
+
+    .marketing-copy {
+      transform: translateX(90px);
+    }
+
+    .marketing-image-wrap {
+      transform: translateX(-90px);
+    }
+
+    .marketing-copy.reveal-visible,
+    .marketing-image-wrap.reveal-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .transaction-copy {
+      transform: translateX(-90px);
+    }
+
+    .transaction-image-wrap {
+      transform: translateX(90px);
+    }
+
+    .transaction-copy.reveal-visible,
+    .transaction-image-wrap.reveal-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .transaction-section {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .transaction-copy,
+    .transaction-image-wrap {
+      position: relative;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(10,10,10,0.9), rgba(8,8,8,0.95));
+      box-shadow: 0 26px 60px rgba(0,0,0,0.30);
+      overflow: hidden;
+    }
+
+    .transaction-copy::before,
+    .transaction-image-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), transparent 18%),
+        linear-gradient(180deg, transparent 58%, rgba(0,0,0,0.44) 100%);
+      pointer-events: none;
+    }
+
+    .transaction-copy {
+      padding: 42px 38px;
+    }
+
+    .transaction-image-wrap {
+      min-height: 680px;
+    }
+
+    .transaction-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .transaction-label {
+      margin: 0 0 16px;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(239,199,109,0.92);
+    }
+
+    .transaction-name {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.25rem, 4vw, 4.2rem);
+      line-height: 1.02;
+      color: #f8f3eb;
+    }
+
+    .transaction-role {
+      margin: 14px 0 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.68);
+    }
+
+    .transaction-copy > p {
+      margin: 22px 0 0;
+      color: rgba(245,239,230,0.8);
+      line-height: 1.84;
+      font-size: 1.02rem;
+      max-width: 680px;
+    }
+
+    .transaction-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #efc76d;
+      font-size: 0.84rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .transaction-read-more:hover {
+      transform: translateX(3px);
+      opacity: 0.96;
+    }
+
+    .transaction-contact-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .transaction-contact-card {
+      padding: 20px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .transaction-copy.reveal-visible .transaction-contact-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .transaction-copy.reveal-visible .transaction-contact-card:nth-child(1) {
+      transition-delay: 140ms;
+    }
+
+    .transaction-copy.reveal-visible .transaction-contact-card:nth-child(2) {
+      transition-delay: 260ms;
+    }
+
+    .transaction-contact-label {
+      display: block;
+      margin-bottom: 10px;
+      color: rgba(239,199,109,0.92);
+      font-size: 0.76rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .transaction-contact-link {
+      color: #f8f3eb;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .transaction-contact-link:hover {
+      color: #efc76d;
+    }
+    @media (max-width: 1120px) {
+      .transaction-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .transaction-section {
+        grid-template-columns: 1fr;
+      }
+
+      .transaction-image-wrap {
+        display: none;
+      }
+      .broker-image-wrap {
+        display: none;
+      }
+
+      .transaction-copy {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .transaction-contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .marketing-section {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.05fr);
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .marketing-image-wrap,
+    .marketing-copy {
+      position: relative;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(10,10,10,0.9), rgba(8,8,8,0.95));
+      box-shadow: 0 26px 60px rgba(0,0,0,0.30);
+      overflow: hidden;
+    }
+
+    .marketing-image-wrap::before,
+    .marketing-copy::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), transparent 18%),
+        linear-gradient(180deg, transparent 58%, rgba(0,0,0,0.44) 100%);
+      pointer-events: none;
+    }
+
+    .marketing-image-wrap {
+      min-height: 680px;
+    }
+
+    .marketing-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .marketing-copy {
+      padding: 42px 38px;
+    }
+
+    .marketing-label {
+      margin: 0 0 16px;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(239,199,109,0.92);
+    }
+
+    .marketing-name {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.25rem, 4vw, 4.2rem);
+      line-height: 1.02;
+      color: #f8f3eb;
+    }
+
+    .marketing-role {
+      margin: 14px 0 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(245,239,230,0.68);
+    }
+
+    .marketing-copy > p {
+      margin: 22px 0 0;
+      color: rgba(245,239,230,0.8);
+      line-height: 1.84;
+      font-size: 1.02rem;
+      max-width: 680px;
+    }
+
+    .marketing-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #efc76d;
+      font-size: 0.84rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .marketing-read-more:hover {
+      transform: translateX(3px);
+      opacity: 0.96;
+    }
+
+    .marketing-socials {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 18px;
+    }
+
+    .marketing-social-link {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 1px solid hsla(40, 20%, 18%, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: hsla(0, 0%, 4%, 0.95);
+      overflow: hidden;
+      flex: 0 0 auto;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .marketing-social-link:hover {
+      transform: translateY(-2px);
+      border-color: hsla(40, 60%, 50%, 0.35);
+      box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.24);
+    }
+
+    .marketing-social-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .marketing-contact-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .marketing-contact-card {
+      padding: 20px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .marketing-copy.reveal-visible .marketing-contact-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .marketing-copy.reveal-visible .marketing-contact-card:nth-child(1) {
+      transition-delay: 140ms;
+    }
+
+    .marketing-copy.reveal-visible .marketing-contact-card:nth-child(2) {
+      transition-delay: 260ms;
+    }
+
+    .marketing-contact-label {
+      display: block;
+      margin-bottom: 10px;
+      color: rgba(239,199,109,0.92);
+      font-size: 0.76rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .marketing-contact-link {
+      color: #f8f3eb;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .marketing-contact-link:hover {
+      color: #efc76d;
+    }
+
+    @media (max-width: 1120px) {
+      .marketing-section {
+        grid-template-columns: 1fr;
+      }
+
+      .marketing-contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .marketing-section {
+        grid-template-columns: 1fr;
+      }
+
+      .marketing-image-wrap {
+        display: none;
+      }
+
+      .marketing-copy {
+        padding: 24px 20px;
+        border-radius: 24px;
+      }
+
+      .marketing-social-link {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+      }
+
+      .marketing-contact-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -531,8 +1181,20 @@
           <p class="broker-label">Broker of Record</p>
           <h2 class="broker-name">Jagdeep Saini</h2>
           <p class="broker-role">Pinnacle Realty Leadership</p>
-          <p>Strong broker leadership shapes the tone of every real estate experience. From supporting clients and agents to helping resolve questions with professionalism, the broker of record helps ensure that service, compliance, and communication stay aligned with the standard Pinnacle Realty represents.</p>
-          <p>Whether you're reaching out for guidance, seeking more clarity about a process, or simply want to connect with someone at the leadership level, Pinnacle welcomes the conversation.</p>
+          <p>Jag comes from an accounting background where he spent many years working in public accounting in a mid-size CPA firm in the GTA, where he has successfully completed many assignments in accounting from small level like personal taxes to big level like financial audits, political candidate audits, political campaign audits, CRA audits, notice to reader engagements, review engagements and audited financial stations of small to mid-size businesses in the GTA area.</p>
+          <button type="button" class="broker-read-more" id="brokerReadMore">Read More →</button>
+
+          <div class="broker-socials" aria-label="Broker social links">
+            <a href="https://www.linkedin.com/in/jagsaini416/" class="broker-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/linkedin-logo.jpg" alt="LinkedIn" class="broker-social-icon" />
+            </a>
+            <a href="https://www.instagram.com/jag_saini?igsh=dndmZ3A3cmRhODNs" class="broker-social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/instagram-logo.jpg" alt="Instagram" class="broker-social-icon" />
+            </a>
+            <a href="https://www.facebook.com/jag.saini.2025/photos" class="broker-social-link" aria-label="X" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/twitter-logo.jpg" alt="X" class="broker-social-icon" />
+            </a>
+          </div>
 
           <div class="broker-contact-grid">
             <div class="broker-contact-card">
@@ -542,6 +1204,61 @@
             <div class="broker-contact-card">
               <span class="broker-contact-label">Email</span>
               <a href="mailto:jagdeep@pinnaclerealty.ca" class="broker-contact-link">jag@pinnaclerealty.ca</a>
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="transaction-section">
+        <article class="transaction-copy reveal-on-scroll">
+          <p class="transaction-label">Transaction Manager</p>
+          <h2 class="transaction-name">Rupinder Kaur</h2>
+          <p class="transaction-role">Pinnacle Realty Operations</p>
+          <p>Rupinder Kaur comes from a strong analytical and organizational background, supported by a Bachelor’s degree with a focus in Mathematics and a Diploma in Computer Applications. Her academic foundation, combined with her experience as a member of the Ontario College of Teachers and a Registered Early Childhood Educator, reflects her attention to detail, precision, and structured approach to every responsibility she takes on.</p>
+          <button type="button" class="transaction-read-more" id="transactionReadMore">Read More →</button>
+
+          <div class="transaction-contact-grid">
+            <div class="transaction-contact-card">
+              <span class="transaction-contact-label">Phone</span>
+              <a href="tel:6472800673" class="transaction-contact-link">(647) 280-0673</a>
+            </div>
+            <div class="transaction-contact-card">
+              <span class="transaction-contact-label">Email</span>
+              <a href="mailto:rupman1987@gmail.com" class="transaction-contact-link">rupman1987@gmail.com</a>
+            </div>
+          </div>
+        </article>
+
+        <div class="transaction-image-wrap reveal-on-scroll" aria-label="Transaction manager portrait">
+          <img src="assets/images/rupinder-kaur.jpg" alt="Rupinder Kaur, Transaction Manager" class="transaction-image" />
+        </div>
+      </section>
+
+      <section class="marketing-section">
+        <div class="marketing-image-wrap reveal-on-scroll" aria-label="Marketing manager portrait">
+          <img src="assets/images/sid-kamboj.jpg" alt="Sid Kamboj, Marketing Manager" class="marketing-image" />
+        </div>
+
+        <article class="marketing-copy reveal-on-scroll">
+          <p class="marketing-label">Marketing Manager</p>
+          <h2 class="marketing-name">Sid Kamboj</h2>
+          <p class="marketing-role">Pinnacle Realty Marketing</p>
+          <p>Sid Kamboj comes from a technology-driven and entrepreneurial background, built through his journey as a software student and independent web developer. As a homeschooled student with a focus on computer science, Sid has developed a deep understanding of modern digital systems, combining technical skill with real-world experience in building and managing online platforms for businesses.</p>
+          <button type="button" class="marketing-read-more" id="marketingReadMore">Read More →</button>
+
+          <div class="marketing-socials" aria-label="Marketing manager social links">
+            <a href="https://www.linkedin.com/in/sidhant-kamboj-ba406839b/" class="marketing-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <img src="assets/images/linkedin-logo.jpg" alt="LinkedIn" class="marketing-social-icon" />
+            </a>
+          </div>
+
+          <div class="marketing-contact-grid">
+            <div class="marketing-contact-card">
+              <span class="marketing-contact-label">Phone</span>
+              <a href="tel:4373854701" class="marketing-contact-link">(437) 385-4701</a>
+            </div>
+            <div class="marketing-contact-card">
+              <span class="marketing-contact-label">Email</span>
+              <a href="mailto:sidkam127@gmail.com" class="marketing-contact-link">sidkam127@gmail.com</a>
             </div>
           </div>
         </article>
@@ -559,6 +1276,58 @@
         </div>
       </section>
     </div>
+      <div class="management-bio-modal" id="managementBioModal" aria-hidden="true">
+        <div class="management-bio-dialog" role="dialog" aria-modal="true" aria-labelledby="management-bio-title">
+          <div class="management-bio-scroll">
+            <button type="button" class="management-bio-close" id="managementBioClose" aria-label="Close biography">✕</button>
+            <div class="management-bio-header">
+              <p class="broker-label">Broker of Record</p>
+              <h2 class="management-bio-title" id="management-bio-title">Jag Saini</h2>
+            </div>
+            <div class="management-bio-body">
+              <p>Jag comes from an accounting background where he spent many years working in public accounting in a mid-size CPA firm in the GTA, where he has successfully completed many assignments in accounting from small level like personal taxes to big level like financial audits, political candidate audits, political campaign audits, CRA audits, notice to reader engagements, review engagements and audited financial stations of small to mid-size businesses in the GTA area.</p>
+              <p>Jag is a Licensed Broker in Ontario, Broker of record, Founder &amp; CEO at Pinnacle. Jag has a decade long experience in real estate sales and advisory in both residential and commercial sector, Jag started as a Commercial sales representative, where he completed many transactions in several asset class like retail, supply chain logistics, industrial and investment.</p>
+              <p>Strong broker leadership shapes the tone of every real estate experience. From supporting clients and agents to helping resolve questions with professionalism, our broker of record helps ensure that service, compliance, and communication stay aligned with the standard Pinnacle represents.</p>
+              <p>Whether you're reaching out for guidance, seeking more clarity about a process, or simply want to connect with someone at the leadership level, Pinnacle welcomes the conversation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="management-bio-modal" id="transactionBioModal" aria-hidden="true">
+        <div class="management-bio-dialog" role="dialog" aria-modal="true" aria-labelledby="transaction-bio-title">
+          <div class="management-bio-scroll">
+            <button type="button" class="management-bio-close" id="transactionBioClose" aria-label="Close biography">✕</button>
+            <div class="management-bio-header">
+              <p class="transaction-label">Transaction Manager</p>
+              <h2 class="management-bio-title" id="transaction-bio-title">Rupinder Kaur</h2>
+            </div>
+            <div class="management-bio-body">
+              <p>Rupinder Kaur comes from a strong analytical and organizational background, supported by a Bachelor’s degree with a focus in Mathematics and a Diploma in Computer Applications. Her academic foundation, combined with her experience as a member of the Ontario College of Teachers and a Registered Early Childhood Educator, reflects her attention to detail, precision, and structured approach to every responsibility she takes on.</p>
+              <p>With a natural strength in calculations, data handling, and systems-based thinking, Rupinder plays a key role in supporting transaction processes with accuracy and efficiency. Her ability to manage timelines, organize documentation, and ensure every detail is handled correctly allows transactions to move forward smoothly without delays or confusion.</p>
+              <p>Strong transaction management is essential to delivering a seamless real estate experience. From coordinating paperwork and tracking key deadlines to maintaining clear communication between all parties involved, Rupinder helps ensure that every step of the process is completed with consistency and professionalism while upholding the standard Pinnacle represents.</p>
+              <p>Whether you’re navigating a transaction, need support with documentation, or are looking for clarity throughout the process, Rupinder Kaur is committed to delivering a smooth, well-managed, and detail-oriented experience from start to finish.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="management-bio-modal" id="marketingBioModal" aria-hidden="true">
+        <div class="management-bio-dialog" role="dialog" aria-modal="true" aria-labelledby="marketing-bio-title">
+          <div class="management-bio-scroll">
+            <button type="button" class="management-bio-close" id="marketingBioClose" aria-label="Close biography">✕</button>
+            <div class="management-bio-header">
+              <p class="marketing-label">Marketing Manager</p>
+              <h2 class="management-bio-title" id="marketing-bio-title">Sid Kamboj</h2>
+            </div>
+            <div class="management-bio-body">
+              <p>Sid Kamboj comes from a technology-driven and entrepreneurial background, built through his journey as a software student and independent web developer. As a homeschooled student with a focus on computer science, Sid has developed a deep understanding of modern digital systems, combining technical skill with real-world experience in building and managing online platforms for businesses.</p>
+              <p>With hands-on experience in website development, branding, and client-focused digital solutions, Sid brings a practical and forward-thinking approach to marketing. His ability to design, build, and optimize web experiences allows Pinnacle to maintain a strong, modern presence across all digital channels, ensuring every platform reflects the professionalism and standard of the brand.</p>
+              <p>With a natural strength in problem-solving, visual structure, and performance-driven design, Sid plays a key role in shaping how Pinnacle connects with its audience. From developing high-converting websites and landing pages to managing digital outreach and brand consistency, every detail is approached with precision and purpose.</p>
+              <p>Strong marketing in today’s market is built on both strategy and execution. By combining technical development with marketing insight, Sid ensures that Pinnacle not only looks professional but performs effectively—attracting the right audience and supporting agents with tools that drive real results.</p>
+              <p>Whether you're promoting a listing, building your personal brand, or looking to elevate your digital presence, Sid Kamboj is committed to delivering modern, efficient, and results-focused marketing support from start to finish.</p>
+            </div>
+          </div>
+        </div>
+      </div>
   </main>
 
   <div id="site-footer"></div>
@@ -566,25 +1335,115 @@
   <script>
     (() => {
       const revealItems = document.querySelectorAll('.reveal-on-scroll');
-      if (!revealItems.length) return;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('reveal-visible');
-            observer.unobserve(entry.target);
-          }
+      if (revealItems.length) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.18,
+          rootMargin: '0px 0px -8% 0px'
         });
-      }, {
-        threshold: 0.18,
-        rootMargin: '0px 0px -8% 0px'
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 90}ms`;
+          observer.observe(item);
+        });
+      }
+
+      const brokerReadMore = document.getElementById('brokerReadMore');
+      const managementBioModal = document.getElementById('managementBioModal');
+      const managementBioClose = document.getElementById('managementBioClose');
+      const transactionReadMore = document.getElementById('transactionReadMore');
+      const transactionBioModal = document.getElementById('transactionBioModal');
+      const transactionBioClose = document.getElementById('transactionBioClose');
+      const marketingReadMore = document.getElementById('marketingReadMore');
+      const marketingBioModal = document.getElementById('marketingBioModal');
+      const marketingBioClose = document.getElementById('marketingBioClose');
+
+      const closeManagementBio = () => {
+        managementBioModal?.classList.remove('is-open');
+        managementBioModal?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        brokerReadMore?.focus();
+      };
+      const closeTransactionBio = () => {
+        transactionBioModal?.classList.remove('is-open');
+        transactionBioModal?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        transactionReadMore?.focus();
+      };
+      const closeMarketingBio = () => {
+        marketingBioModal?.classList.remove('is-open');
+        marketingBioModal?.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        marketingReadMore?.focus();
+      };
+
+      brokerReadMore?.addEventListener('click', () => {
+        managementBioModal?.classList.add('is-open');
+        managementBioModal?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+      transactionReadMore?.addEventListener('click', () => {
+        transactionBioModal?.classList.add('is-open');
+        transactionBioModal?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      });
+      marketingReadMore?.addEventListener('click', () => {
+        marketingBioModal?.classList.add('is-open');
+        marketingBioModal?.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
       });
 
-      revealItems.forEach((item, index) => {
-        item.style.transitionDelay = `${index * 90}ms`;
-        observer.observe(item);
+      managementBioClose?.addEventListener('click', closeManagementBio);
+      transactionBioClose?.addEventListener('click', closeTransactionBio);
+      marketingBioClose?.addEventListener('click', closeMarketingBio);
+
+      managementBioModal?.addEventListener('click', (event) => {
+        if (event.target === managementBioModal) closeManagementBio();
       });
+      transactionBioModal?.addEventListener('click', (event) => {
+        if (event.target === transactionBioModal) closeTransactionBio();
+      });
+      marketingBioModal?.addEventListener('click', (event) => {
+        if (event.target === marketingBioModal) closeMarketingBio();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && managementBioModal?.classList.contains('is-open')) {
+          closeManagementBio();
+        }
+        if (event.key === 'Escape' && transactionBioModal?.classList.contains('is-open')) {
+          closeTransactionBio();
+        }
+        if (event.key === 'Escape' && marketingBioModal?.classList.contains('is-open')) {
+          closeMarketingBio();
+        }
+      });
+
     })();
   </script>
 </body>
 </html>
+
+      <div class="management-bio-modal" id="marketingBioModal" aria-hidden="true">
+        <div class="management-bio-dialog" role="dialog" aria-modal="true" aria-labelledby="marketing-bio-title">
+          <div class="management-bio-scroll">
+            <button type="button" class="management-bio-close" id="marketingBioClose" aria-label="Close biography">✕</button>
+            <div class="management-bio-header">
+              <p class="marketing-label">Marketing Manager</p>
+              <h2 class="management-bio-title" id="marketing-bio-title">Sid Kamboj</h2>
+            </div>
+            <div class="management-bio-body">
+              <p>Sid Kamboj comes from a technology-driven and entrepreneurial background, built through his journey as a software student and independent web developer. As a homeschooled student with a focus on computer science, Sid has developed a deep understanding of modern digital systems, combining technical skill with real-world experience in building and managing online platforms for businesses.</p>
+              <p>Sid’s journey began with building websites for local businesses and organizations, where he learned to apply both creative and analytical thinking to solve real-world problems. His hands-on experience ranges from developing custom web solutions to managing marketing campaigns and brand identities, giving him a unique perspective on the intersection of technology and business growth.</p>
+              <p>As Marketing Manager at Pinnacle Realty, Sid brings a blend of technical expertise, creative vision, and a passion for helping businesses thrive in the digital age. He is committed to elevating Pinnacle’s brand presence, supporting agents with modern marketing tools, and ensuring the brokerage stays at the forefront of digital innovation in real estate.</p>
+              <p>Whether you’re looking for help with your online presence, have questions about digital marketing, or want to explore new strategies for reaching clients, Sid is here as a resource for the entire Pinnacle team.</p>
+            </div>
+          </div>
+        </div>
+      </div>
