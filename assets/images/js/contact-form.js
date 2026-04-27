@@ -48,7 +48,7 @@ import {
         phone: document.getElementById("contactPhone").value.trim(),
         intent: document.getElementById("contactIntent").value,
         message: document.getElementById("contactMessage").value.trim(),
-        sourceSite: window.location.hostname || "pinnaclerealty.ca",
+        sourceSite: window.location.hostname || "pinnaclerealty.vercel.app",
         destinationEmail: "jag@pinnaclerealty.ca",
         type: "contact_inquiry",
         status: "new",
