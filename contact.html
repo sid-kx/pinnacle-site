@@ -708,43 +708,6 @@
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
-  <script>
-    (() => {
-      const revealItems = document.querySelectorAll('.reveal-on-scroll');
-      if (revealItems.length) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('reveal-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, {
-          threshold: 0.18,
-          rootMargin: '0px 0px -6% 0px'
-        });
-
-        revealItems.forEach((item, index) => {
-          item.style.transitionDelay = `${index * 30}ms`;
-          observer.observe(item);
-        });
-      }
-
-      const contactForm = document.getElementById('contactInquiryForm');
-      const contactSuccessState = document.getElementById('contactSuccessState');
-      const contactReset = document.getElementById('contactReset');
-
-      contactForm?.addEventListener('submit', (event) => {
-        event.preventDefault();
-        contactSuccessState?.classList.add('is-visible');
-      });
-
-      contactReset?.addEventListener('click', () => {
-        window.setTimeout(() => {
-          contactSuccessState?.classList.remove('is-visible');
-        }, 0);
-      });
-    })();
-  </script>
+  <script type="module" src="assets/js/contact-form.js"></script>
 </body>
 </html>
