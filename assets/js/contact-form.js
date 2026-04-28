@@ -68,10 +68,18 @@ import { supabase } from "./supabase-config.js";
 
       if (error) throw error;
 
+      const { error: emailError } = await supabase.functions.invoke("send-contact-email", {
+        body: submission
+      });
+
+      if (emailError) {
+        console.error("Email notification error:", emailError);
+      }
+
       contactForm.reset();
       contactSuccessState?.classList.add("is-visible");
 
-      console.log("Contact submission saved to Supabase.");
+      console.log("Contact submission saved to Supabase and email notification requested.");
     } catch (error) {
       console.error("Supabase contact form error:", error);
       alert("Something went wrong. Please try again.");
