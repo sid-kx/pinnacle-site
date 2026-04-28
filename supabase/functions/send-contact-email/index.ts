@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Pinnacle Realty <onboarding@resend.dev>",
-        to: ["jag@pinnaclerealty.ca"],
+        to: ["marketing@pinnaclerealty.ca"],
         reply_to: email,
         subject: `New Pinnacle Realty Contact Inquiry - ${name}`,
         html: emailHtml,

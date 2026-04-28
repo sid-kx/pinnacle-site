@@ -48,7 +48,7 @@ import { supabase } from "./supabase-config.js";
       intent: document.getElementById("contactIntent").value,
       message: document.getElementById("contactMessage").value.trim(),
       source_site: window.location.hostname || "pinnaclerealty.ca",
-      destination_email: "jag@pinnaclerealty.ca",
+      destination_email: "marketing@pinnaclerealty.ca",
       type: "contact_inquiry",
       status: "new"
     };
