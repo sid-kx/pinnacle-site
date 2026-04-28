@@ -68,9 +68,12 @@ import { supabase } from "./supabase-config.js";
 
       if (error) throw error;
 
-      const { error: emailError } = await supabase.functions.invoke("send-contact-email", {
+      const { error: emailError, data: emailData } = await supabase.functions.invoke("send-contact-email", {
         body: submission
       });
+
+      console.log("Email function response:", emailData);
+      console.log("Email function error:", emailError);
 
       if (emailError) {
         console.error("Email notification error:", emailError);

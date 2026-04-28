@@ -8,8 +8,9 @@ Deno.serve(async (req) => {
         headers: { "Content-Type": "application/json" },
       });
     }
-
+    console.log("Sending email through Resend...");
     const body = await req.json();
+    console.log("Received contact form body:", body);
 
     const {
       name,
@@ -57,6 +58,8 @@ Deno.serve(async (req) => {
     });
 
     const resendData = await resendResponse.json();
+    console.log("Resend response status:", resendResponse.status);
+    console.log("Resend response data:", resendData);
 
     if (!resendResponse.ok) {
       return new Response(JSON.stringify({ error: resendData }), {
