@@ -1,12 +1,7 @@
-import { db } from "./firebase-config.js";
-import {
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { supabase } from "./supabase-config.js";
 
 (() => {
-  console.log("contact-form.js loaded");
+  console.log("contact-form.js loaded with Supabase");
 
   const revealItems = document.querySelectorAll(".reveal-on-scroll");
 
@@ -36,48 +31,55 @@ import {
   const contactSuccessState = document.getElementById("contactSuccessState");
   const contactReset = document.getElementById("contactReset");
 
-  if (contactForm) {
-    contactForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      console.log("Contact form submitted");
-
-      const submitButton = contactForm.querySelector("button[type='submit']");
-
-      const formData = {
-        name: document.getElementById("contactName").value.trim(),
-        email: document.getElementById("contactEmail").value.trim(),
-        phone: document.getElementById("contactPhone").value.trim(),
-        intent: document.getElementById("contactIntent").value,
-        message: document.getElementById("contactMessage").value.trim(),
-        sourceSite: window.location.hostname || "pinnaclerealty.ca",
-        destinationEmail: "jag@pinnaclerealty.ca",
-        type: "contact_inquiry",
-        status: "new",
-        createdAt: serverTimestamp()
-      };
-
-      if (!formData.name || !formData.email || !formData.phone) {
-        alert("Please enter your name, email, and phone number.");
-        return;
-      }
-
-      try {
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
-
-        await addDoc(collection(db, "contactSubmissions"), formData);
-
-        contactForm.reset();
-        contactSuccessState?.classList.add("is-visible");
-      } catch (error) {
-        console.error("Contact form submission error:", error);
-        alert("Something went wrong. Please try again.");
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Submit Inquiry";
-      }
-    });
+  if (!contactForm) {
+    console.error("contactInquiryForm not found");
+    return;
   }
+
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = contactForm.querySelector("button[type='submit']");
+
+    const submission = {
+      name: document.getElementById("contactName").value.trim(),
+      email: document.getElementById("contactEmail").value.trim(),
+      phone: document.getElementById("contactPhone").value.trim(),
+      intent: document.getElementById("contactIntent").value,
+      message: document.getElementById("contactMessage").value.trim(),
+      source_site: window.location.hostname || "pinnaclerealty.ca",
+      destination_email: "jag@pinnaclerealty.ca",
+      type: "contact_inquiry",
+      status: "new"
+    };
+
+    if (!submission.name || !submission.email || !submission.phone) {
+      alert("Please enter your name, email, and phone number.");
+      return;
+    }
+
+    try {
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+
+      const { error } = await supabase
+        .from("contact_submissions")
+        .insert([submission]);
+
+      if (error) throw error;
+
+      contactForm.reset();
+      contactSuccessState?.classList.add("is-visible");
+
+      console.log("Contact submission saved to Supabase.");
+    } catch (error) {
+      console.error("Supabase contact form error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit Inquiry";
+    }
+  });
 
   contactReset?.addEventListener("click", () => {
     window.setTimeout(() => {
