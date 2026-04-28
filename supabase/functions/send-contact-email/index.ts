@@ -1,14 +1,33 @@
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
 Deno.serve(async (req) => {
+  // This handles the browser preflight request
+  if (req.method === "OPTIONS") {
+    return new Response("ok", {
+      headers: corsHeaders,
+    });
+  }
+
   try {
+    console.log("send-contact-email function started");
+    console.log("RESEND_API_KEY exists:", !!RESEND_API_KEY);
+
     if (req.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
         status: 405,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        },
       });
     }
-    console.log("Sending email through Resend...");
+
     const body = await req.json();
     console.log("Received contact form body:", body);
 
@@ -24,7 +43,10 @@ Deno.serve(async (req) => {
     if (!name || !email || !phone) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        },
       });
     }
 
@@ -42,6 +64,8 @@ Deno.serve(async (req) => {
       </div>
     `;
 
+    console.log("Sending email through Resend...");
+
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -58,24 +82,36 @@ Deno.serve(async (req) => {
     });
 
     const resendData = await resendResponse.json();
+
     console.log("Resend response status:", resendResponse.status);
     console.log("Resend response data:", resendData);
 
     if (!resendResponse.ok) {
       return new Response(JSON.stringify({ error: resendData }), {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+        },
       });
     }
 
     return new Response(JSON.stringify({ success: true, data: resendData }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
     });
   } catch (error) {
+    console.error("send-contact-email error:", error);
+
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+      },
     });
   }
 });
