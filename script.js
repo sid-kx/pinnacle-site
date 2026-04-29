@@ -4,7 +4,7 @@ const navConfig = [
       { title: 'About', href: 'about.html', key: 'about' },
       { title: 'Management', href: 'management.html', key: 'management' },
       { title: 'Agents', href: 'agents.html', key: 'agents' },
-      { title: 'Agents Login', href: 'https://portal.pinnaclerealty.ca', key: 'agents-login' },
+      { title: 'Agents Login', href: 'https://agentsso.pinnaclerealty.ca', key: 'agents-login' },
     ]
   },
   {
