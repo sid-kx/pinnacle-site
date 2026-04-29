@@ -35,7 +35,7 @@ const footerColumns = [
       ['About', 'about.html'],
       ['Management', 'management.html'],
       ['Agents', 'agents.html'],
-      ['Agents Login', 'https://portal.pinnaclerealty.ca'],
+      ['Agents Login', 'https://agentsso.pinnaclerealty.ca'],
     ]
   },
   {
