@@ -18,7 +18,9 @@
 * { box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 132px;
   background: #050505;
+  text-rendering: optimizeSpeed;
 }
 body {
   margin: 0;
@@ -34,13 +36,23 @@ body {
   overflow-x: hidden;
   width: 100%;
   padding-top: 132px;
+  opacity: 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-body.menu-open { overflow: hidden; }
+body.menu-open,
+body.legal-modal-open {
+  overflow: hidden;
+  height: 100vh;
+  touch-action: none;
+  overscroll-behavior: none;
+}
 
 html, body {
   max-width: 100%;
   overflow-x: hidden;
   background-color: #050505;
+  overscroll-behavior-x: none;
 }
 
 .site-header,
@@ -58,8 +70,42 @@ html, body {
 }
 
 a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  image-rendering: auto;
+}
 button { font: inherit; }
+
+section,
+.site-footer,
+.blank-stage,
+.blank-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+
+.site-header,
+.navbar,
+.navbar-inner,
+.hero-section,
+.legal-modal,
+.mobile-menu {
+  content-visibility: visible;
+}
+
+.reveal-on-scroll,
+.fade-in,
+.scroll-reveal {
+  will-change: transform, opacity;
+}
+
+.reveal-visible,
+.visible,
+.is-visible {
+  will-change: auto;
+}
 
 .container {
   width: min(1920px, calc(100% - 56px));
@@ -98,7 +144,7 @@ button { font: inherit; }
   position: relative;
   width: min(1920px, calc(100% - 56px));
   margin: 0 auto;
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+  transition: background 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, transform 0.28s ease;
   background: rgba(141, 123, 111, 0.074);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -182,7 +228,7 @@ button { font: inherit; }
   font-weight: 500;
   color: rgba(245,239,230,0.78);
   border-radius: 14px;
-  transition: color 0.3s ease, transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  transition: color 0.22s ease, transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
   white-space: nowrap;
 }
 
@@ -226,7 +272,7 @@ button { font: inherit; }
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: opacity 0.24s ease, transform 0.24s ease, visibility 0.24s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 
 .nav-links .has-children:hover > .submenu,
@@ -562,6 +608,8 @@ main.blank-main {
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.26s ease, visibility 0.26s ease;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .legal-modal.open {
@@ -621,9 +669,11 @@ main.blank-main {
 .legal-modal-content {
   padding: 54px 34px 32px;
   max-height: min(84vh, 920px);
-  overflow-y: visible;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(214,171,77,0.35) transparent;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .legal-modal-content::-webkit-scrollbar {
@@ -651,9 +701,6 @@ main.blank-main {
   font-size: 1rem;
 }
 
-body.legal-modal-open {
-  overflow: hidden;
-}
 
 @media (max-width: 1200px) {
   .footer-main {
@@ -668,26 +715,42 @@ body.legal-modal-open {
 }
 
 .hamburger {
+  position: relative;
+  z-index: 5;
   display: none;
-  flex-direction: column;
-  gap: 5px;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
 }
 
 .hamburger span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   display: block;
-  width: 24px;
-  height: 1px;
+  width: 26px;
+  height: 1.5px;
   background: var(--gold-soft);
-  transition: all 0.3s ease;
+  border-radius: 999px;
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(2px, 4px); }
-.hamburger.open span:nth-child(2) { opacity: 0; }
-.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(2px, -4px); }
+.hamburger span:nth-child(1) { transform: translate(-50%, -50%) translateY(-8px); }
+.hamburger span:nth-child(2) { transform: translate(-50%, -50%); }
+.hamburger span:nth-child(3) { transform: translate(-50%, -50%) translateY(8px); }
+
+.hamburger.open span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: translate(-50%, -50%) scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translate(-50%, -50%) rotate(-45deg); }
 
 @media (max-width: 980px) {
   .container { width: min(100%, calc(100% - 28px)); }
@@ -728,6 +791,10 @@ body.legal-modal-open {
     border: 1px solid rgba(255,255,255,0.12);
     box-shadow: 0 20px 44px rgba(0,0,0,0.32);
     overflow-x: hidden;
+    max-height: calc(100vh - 132px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
   }
 
   .mobile-menu.open {
@@ -879,7 +946,7 @@ body.legal-modal-open {
   .navbar-inner {
     min-height: 82px;
     gap: 12px;
-    padding: 0 20px 0 16px;
+    padding: 0 24px 0 16px;
   }
 
   .navbar-logo {
@@ -892,12 +959,16 @@ body.legal-modal-open {
   }
 
   .hamburger {
-    padding: 10px;
-    margin-right: 6px;
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    padding: 0;
+    margin-right: 0;
+    transform: translateX(-2px);
   }
 
   .hamburger span {
-    width: 22px;
+    width: 26px;
   }
 
   .mobile-menu {
@@ -905,6 +976,7 @@ body.legal-modal-open {
     padding: 12px;
     gap: 8px;
     border-radius: 22px;
+    max-height: calc(100vh - 118px);
   }
 
   .mobile-subtoggle,
@@ -1003,5 +1075,33 @@ body.legal-modal-open {
   .legal-modal-content p {
     font-size: 0.94rem;
     line-height: 1.72;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    scroll-padding-top: 108px;
+  }
+
+  .reveal-on-scroll,
+  .fade-in,
+  .scroll-reveal {
+    transition-duration: 0.35s !important;
   }
 }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="/pinnacle-favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/pinnacle-favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/pinnacle-apple-touch-icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pinnacle Realty | Pinnacle Realty</title>
@@ -302,14 +302,24 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      margin-top: -1px;
     }
 
     .second-overlay {
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(8, 8, 8, 0.58) 0%, rgba(8, 8, 8, 0.32) 38%, rgba(8, 8, 8, 0.56) 100%),
-        radial-gradient(circle at 28% 48%, rgba(214, 171, 77, 0.10), transparent 26%);
+        linear-gradient(
+          180deg,
+          rgba(5, 5, 5, 0) 0%,
+          rgba(5, 5, 5, 0.16) 6%,
+          rgba(8, 8, 8, 0.46) 24%,
+          rgba(8, 8, 8, 0.72) 52%,
+          rgba(5, 5, 5, 0.90) 100%
+        ),
+        radial-gradient(circle at 28% 72%, rgba(214, 171, 77, 0.10), transparent 28%),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0.10) 42%, rgba(0, 0, 0, 0.34) 100%);
+      pointer-events: none;
     }
 
     .second-content {

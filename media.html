@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="/pinnacle-favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/pinnacle-favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/pinnacle-apple-touch-icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Media | Pinnacle Realty</title>
@@ -337,6 +337,8 @@
       background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      overscroll-behavior: contain;
+      touch-action: none;
     }
 
     .media-article-modal.is-open {
@@ -370,6 +372,15 @@
       padding: 34px 32px 30px;
       scrollbar-width: thin;
       scrollbar-color: rgba(239,199,109,0.55) rgba(255,255,255,0.06);
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+    html.media-modal-lock,
+    body.media-modal-lock {
+      overflow: hidden;
+      height: 100vh;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     .media-article-scroll::-webkit-scrollbar {
@@ -795,13 +806,36 @@
       const articleOpenButtons = document.querySelectorAll('[data-article-open]');
       const articleModals = document.querySelectorAll('.media-article-modal');
       let lastTrigger = null;
+      let savedScrollY = 0;
+
+      const lockMediaScroll = () => {
+        savedScrollY = window.scrollY || document.documentElement.scrollTop;
+        document.documentElement.classList.add('media-modal-lock');
+        document.body.classList.add('media-modal-lock');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+      };
+
+      const unlockMediaScroll = () => {
+        document.documentElement.classList.remove('media-modal-lock');
+        document.body.classList.remove('media-modal-lock');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, savedScrollY);
+      };
 
       const closeAllArticleModals = () => {
         articleModals.forEach((modal) => {
           modal.classList.remove('is-open');
           modal.setAttribute('aria-hidden', 'true');
         });
-        document.body.style.overflow = '';
+        unlockMediaScroll();
         if (lastTrigger) lastTrigger.focus();
       };
 
@@ -813,7 +847,7 @@
           lastTrigger = button;
           modal.classList.add('is-open');
           modal.setAttribute('aria-hidden', 'false');
-          document.body.style.overflow = 'hidden';
+          lockMediaScroll();
         });
       });
 

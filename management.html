@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/favicon-32x32.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="/pinnacle-favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="/pinnacle-favicon-32x32.png">
+  <link rel="apple-touch-icon" href="/pinnacle-apple-touch-icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Management | Pinnacle Realty</title>
@@ -339,6 +339,8 @@
       background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      overscroll-behavior: contain;
+      touch-action: none;
     }
 
     .management-bio-modal.is-open {
@@ -368,7 +370,17 @@
       position: relative;
       z-index: 1;
       max-height: min(86vh, 920px);
+      overflow-y: auto;
       padding: 34px 32px 30px;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+    html.management-modal-lock,
+    body.management-modal-lock {
+      overflow: hidden;
+      height: 100vh;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     .management-bio-close {
@@ -1196,7 +1208,7 @@
           <div class="broker-contact-grid">
             <div class="broker-contact-card">
               <span class="broker-contact-label">Phone</span>
-              <a href="tel:9057816450" class="broker-contact-link">(416) 543-4308</a>
+              <a href="tel:9056097653" class="broker-contact-link">(905) 609-SOLD</a>
             </div>
             <div class="broker-contact-card">
               <span class="broker-contact-label">Email</span>
@@ -1216,11 +1228,11 @@
           <div class="transaction-contact-grid">
             <div class="transaction-contact-card">
               <span class="transaction-contact-label">Phone</span>
-              <a href="tel:6472800673" class="transaction-contact-link">(647) 280-0673</a>
+              <a href="tel:9056097653" class="transaction-contact-link">(905) 609-SOLD</a>
             </div>
             <div class="transaction-contact-card">
               <span class="transaction-contact-label">Email</span>
-              <a href="mailto:rupman1987@gmail.com" class="transaction-contact-link">rupman1987@gmail.com</a>
+              <a href="mailto:deals@pinnaclerealty.ca" class="transaction-contact-link">deals@pinnaclerealty.ca</a>
             </div>
           </div>
         </article>
@@ -1251,11 +1263,11 @@
           <div class="marketing-contact-grid">
             <div class="marketing-contact-card">
               <span class="marketing-contact-label">Phone</span>
-              <a href="tel:4373854701" class="marketing-contact-link">(437) 385-4701</a>
+              <a href="tel:9056097653" class="marketing-contact-link">(905) 609-SOLD</a>
             </div>
             <div class="marketing-contact-card">
               <span class="marketing-contact-label">Email</span>
-              <a href="mailto:sidkam127@gmail.com" class="marketing-contact-link">sidkam127@gmail.com</a>
+              <a href="mailto:marketing@pinnaclerealty.ca" class="marketing-contact-link">marketing@pinnaclerealty.ca</a>
             </div>
           </div>
         </article>
@@ -1361,39 +1373,63 @@
       const marketingBioModal = document.getElementById('marketingBioModal');
       const marketingBioClose = document.getElementById('marketingBioClose');
 
+      let savedManagementScrollY = 0;
+
+      const lockManagementScroll = () => {
+        savedManagementScrollY = window.scrollY || document.documentElement.scrollTop;
+        document.documentElement.classList.add('management-modal-lock');
+        document.body.classList.add('management-modal-lock');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedManagementScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+      };
+
+      const unlockManagementScroll = () => {
+        document.documentElement.classList.remove('management-modal-lock');
+        document.body.classList.remove('management-modal-lock');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, savedManagementScrollY);
+      };
+
       const closeManagementBio = () => {
         managementBioModal?.classList.remove('is-open');
         managementBioModal?.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        unlockManagementScroll();
         brokerReadMore?.focus();
       };
       const closeTransactionBio = () => {
         transactionBioModal?.classList.remove('is-open');
         transactionBioModal?.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        unlockManagementScroll();
         transactionReadMore?.focus();
       };
       const closeMarketingBio = () => {
         marketingBioModal?.classList.remove('is-open');
         marketingBioModal?.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        unlockManagementScroll();
         marketingReadMore?.focus();
       };
 
       brokerReadMore?.addEventListener('click', () => {
         managementBioModal?.classList.add('is-open');
         managementBioModal?.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        lockManagementScroll();
       });
       transactionReadMore?.addEventListener('click', () => {
         transactionBioModal?.classList.add('is-open');
         transactionBioModal?.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        lockManagementScroll();
       });
       marketingReadMore?.addEventListener('click', () => {
         marketingBioModal?.classList.add('is-open');
         marketingBioModal?.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        lockManagementScroll();
       });
 
       managementBioClose?.addEventListener('click', closeManagementBio);

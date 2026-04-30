@@ -390,12 +390,81 @@ function createFooter() {
   });
 }
 
+function optimizePagePerformance() {
+  document.documentElement.classList.add('js-ready');
+
+  const images = Array.from(document.querySelectorAll('img'));
+  const firstVisibleImage = images.find((image) => {
+    const rect = image.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  });
+
+  images.forEach((image) => {
+    image.setAttribute('decoding', image.getAttribute('decoding') || 'async');
+
+    if (image === firstVisibleImage || image.classList.contains('navbar-logo-img')) {
+      image.setAttribute('fetchpriority', image.getAttribute('fetchpriority') || 'high');
+      return;
+    }
+
+    if (!image.hasAttribute('loading')) {
+      image.setAttribute('loading', 'lazy');
+    }
+  });
+
+  const smoothAnchorLinks = document.querySelectorAll('a[href^="#"]');
+
+  smoothAnchorLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+
+      const target = document.querySelector(targetId);
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  const revealItems = document.querySelectorAll('.reveal-on-scroll, .fade-in, .scroll-reveal');
+
+  if ('IntersectionObserver' in window && revealItems.length) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible', 'visible', 'is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.14,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+  }
+
+  window.addEventListener('load', () => {
+    document.body.classList.add('page-loaded');
+  }, { once: true });
+}
+
 createNav();
 createFooter();
+optimizePagePerformance();
 
 // Logo sizing fix
 const style = document.createElement('style');
 style.innerHTML = `
+  html:not(.js-ready) body {
+    opacity: 1;
+  }
+
+  img {
+    content-visibility: auto;
+  }
+
   .navbar-logo-img {
     height: 46px;
     width: auto;
