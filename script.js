@@ -22,9 +22,14 @@ const navConfig = [
       { title: 'Get Listing Alerts', href: 'listing-alerts.html', key: 'listing-alerts' },
     ]
   },
+  {
+    title: 'MEDIA', href: 'media.html', key: 'media', children: [
+      { title: 'Articles', href: 'media.html', key: 'media' },
+      { title: 'Blogs', href: 'https://blogs.pinnaclerealty.ca', key: 'blogs' },
+    ]
+  },
   { title: 'LISTINGS', href: 'listings.html', key: 'listings' },
   { title: 'NEW CONSTRUCTION', href: 'new-construction.html', key: 'new-construction' },
-  { title: 'MEDIA', href: 'media.html', key: 'media' },
   { title: 'CONTACT', href: 'contact.html', key: 'contact' },
 ];
 
@@ -58,11 +63,17 @@ const footerColumns = [
   {
     heading: 'EXPLORE',
     links: [
-      ['Listings', 'listing-alerts.html'],
+      ['Listings', 'listings.html'],
       ['New Construction', 'new-construction.html'],
-      ['Media', 'media.html'],
       ['Contact', 'contact.html'],
       ['Join Us', 'https://join.pinnaclerealty.ca'],
+    ]
+  },
+  {
+    heading: 'MEDIA',
+    links: [
+      ['Articles', 'media.html'],
+      ['Blogs', 'https://blogs.pinnaclerealty.ca'],
     ]
   },
 ];
@@ -495,7 +506,37 @@ style.innerHTML = `
   }
 
   .footer-brand-area {
-    text-align: center;
+    text-align: left;
+  }
+
+  @media (min-width: 1100px) {
+    .footer-main {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(130px, 1fr)) minmax(280px, 0.9fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .footer-column {
+      min-width: 0;
+    }
+
+    .footer-brand-area {
+      justify-self: end;
+      max-width: 310px;
+      text-align: center;
+      padding-top: 0;
+    }
+
+    .footer-logo {
+      justify-content: center;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .footer-logo-img {
+      height: 44px;
+    }
   }
 `;
 document.head.appendChild(style);
