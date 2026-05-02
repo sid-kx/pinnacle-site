@@ -277,7 +277,7 @@ function createFooter() {
           <a href="https://www.youtube.com/@PinnacleRealty905" class="social-icon" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
             <img src="assets/images/youtube-logo.jpg" alt="YouTube" class="social-icon-img" />
           </a>
-          <a href="https://www.facebook.com/PinnacleRealtyCanada" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/people/Pinnacle-Realty/61576469951373/?rdid=SvUUdr3EQLLckm6e&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1DBBLDs4hj%2F" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
             <img src="assets/images/facebook-logo.jpg" alt="Facebook" class="social-icon-img" />
           </a>
         </div>
