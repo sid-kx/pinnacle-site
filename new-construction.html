@@ -8,17 +8,1139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Construction | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" as="image" href="assets/images/service-sellers.jpg" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    .construction-page {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% 16%, rgba(214, 171, 77, 0.14), transparent 22%),
+        radial-gradient(circle at 88% 10%, rgba(214, 171, 77, 0.08), transparent 18%),
+        linear-gradient(180deg, #050505 0%, #0a0a0a 54%, #050505 100%);
+      scroll-behavior: smooth;
+    }
+
+    .construction-hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      margin-top: -150px;
+      padding-top: 150px;
+    }
+
+    .construction-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(112deg, rgba(5, 5, 5, 0.88) 8%, rgba(5, 5, 5, 0.48) 48%, rgba(5, 5, 5, 0.9) 100%),
+        radial-gradient(circle at 76% 20%, rgba(214, 171, 77, 0.14), transparent 26%),
+        url('assets/images/service-sellers.jpg') center 32%/cover no-repeat;
+      z-index: -2;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .construction-hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 190px;
+      background: linear-gradient(180deg, transparent, #050505 88%);
+      z-index: -1;
+    }
+
+    .construction-hero-inner,
+    .construction-directory-shell {
+      width: min(1360px, calc(100% - 56px));
+      margin: 0 auto;
+    }
+
+    .construction-hero-card {
+      max-width: 920px;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .construction-kicker,
+    .construction-section-kicker,
+    .construction-modal-label {
+      margin: 0 0 16px;
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(239, 199, 109, 0.94);
+      font-weight: 800;
+    }
+
+    .construction-title {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.7rem, 5vw, 5.8rem);
+      line-height: 0.98;
+      letter-spacing: 0.02em;
+      color: #f8f3eb;
+      text-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .construction-title span {
+      color: #efc76d;
+    }
+
+    .construction-description {
+      margin: 24px 0 0;
+      max-width: 720px;
+      color: rgba(245, 239, 230, 0.82);
+      font-size: 1.05rem;
+      line-height: 1.84;
+    }
+
+    .construction-directory {
+      position: relative;
+      padding: 36px 0 96px;
+    }
+
+    .construction-directory-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .construction-toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 26px;
+      justify-items: center;
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .construction-heading h2 {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2.1rem, 3.4vw, 4rem);
+      line-height: 1.05;
+      color: #f8f3eb;
+    }
+
+    .construction-heading p {
+      margin: 14px auto 0;
+      max-width: 820px;
+      color: rgba(245, 239, 230, 0.74);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .construction-search-wrap {
+      position: relative;
+      width: min(780px, 100%);
+      margin: 0 auto;
+    }
+
+    .construction-search-wrap label {
+      display: block;
+      margin-bottom: 10px;
+      color: rgba(239, 199, 109, 0.92);
+      font-size: 0.76rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .construction-search {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      outline: none;
+      color: #f8f3eb;
+      background: rgba(255, 255, 255, 0.055);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.2);
+      transition: border 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+    }
+
+    .construction-search::placeholder {
+      color: rgba(245, 239, 230, 0.42);
+    }
+
+    .construction-search:focus {
+      border-color: rgba(239, 199, 109, 0.52);
+      background: rgba(255, 255, 255, 0.075);
+      box-shadow: 0 0 0 4px rgba(239, 199, 109, 0.08), 0 18px 46px rgba(0, 0, 0, 0.24);
+    }
+
+    .construction-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      position: relative;
+      min-height: 440px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(12, 12, 12, 0.92), rgba(8, 8, 8, 0.96));
+      box-shadow: 0 26px 64px rgba(0, 0, 0, 0.28);
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: translateY(0);
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, opacity 0.28s ease;
+      content-visibility: auto;
+      contain-intrinsic-size: 440px;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(214, 171, 77, 0.1), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 30%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(239, 199, 109, 0.26);
+      box-shadow: 0 32px 74px rgba(0, 0, 0, 0.34);
+    }
+
+    .project-card.is-hidden {
+      display: none;
+    }
+
+    .project-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .project-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.32s ease;
+    }
+
+    .project-card:hover .project-image-wrap img {
+      transform: scale(1.04);
+    }
+
+    .project-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #16130a;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      background: linear-gradient(135deg, rgba(239, 199, 109, 0.94), rgba(93, 67, 16, 0.9));
+    }
+
+    .project-image-count {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      z-index: 2;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #f8f3eb;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.66);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .project-card-content {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .project-name {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1.65rem, 2vw, 2.35rem);
+      line-height: 1.04;
+      color: #f8f3eb;
+    }
+
+    .project-location {
+      margin: 12px 0 0;
+      color: rgba(239, 199, 109, 0.92);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .project-card-summary {
+      margin: 18px 0 0;
+      color: rgba(245, 239, 230, 0.74);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+
+    .project-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .project-price-tag {
+      color: rgba(245, 239, 230, 0.72);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .project-open-btn {
+      min-height: 44px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      color: #131313;
+      background: linear-gradient(180deg, rgba(239, 199, 109, 0.96), rgba(214, 171, 77, 0.9));
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .project-open-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(214, 171, 77, 0.18);
+    }
+
+    .project-status-pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #16130a;
+      background: linear-gradient(180deg, rgba(239, 199, 109, 0.98), rgba(214, 171, 77, 0.86));
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .construction-empty {
+      display: none;
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 22px;
+      color: rgba(245, 239, 230, 0.78);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    .construction-empty.is-visible {
+      display: block;
+    }
+
+    .project-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1400;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overscroll-behavior: contain;
+    }
+
+    .project-modal.is-open {
+      display: flex;
+    }
+
+    .project-modal-dialog {
+      position: relative;
+      width: min(1040px, 100%);
+      max-height: min(88vh, 920px);
+      border-radius: 30px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(10, 10, 10, 0.98), rgba(8, 8, 8, 0.99));
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
+    }
+
+    .project-modal-dialog::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 100% 0%, rgba(214, 171, 77, 0.1), transparent 28%);
+      pointer-events: none;
+    }
+
+    .project-modal-scroll {
+      position: relative;
+      z-index: 1;
+      max-height: min(88vh, 920px);
+      overflow-y: auto;
+      padding: 34px;
+      overscroll-behavior: contain;
+    }
+
+    .project-modal-close {
+      position: sticky;
+      top: 0;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: #f8f3eb;
+      cursor: pointer;
+      z-index: 4;
+      transition: transform 0.22s ease, background 0.22s ease;
+    }
+
+    .project-modal-close:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .project-modal-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 28px;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .project-gallery {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .project-gallery-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .project-gallery-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .project-gallery-slide {
+      min-width: 100%;
+      aspect-ratio: 16 / 10;
+      scroll-snap-align: start;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .project-gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-gallery-controls {
+      position: absolute;
+      inset: auto 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .project-gallery-btn {
+      pointer-events: auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.64);
+      color: #f8f3eb;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: transform 0.22s ease, background 0.22s ease;
+    }
+
+    .project-gallery-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(0, 0, 0, 0.78);
+    }
+
+    .project-gallery-counter {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #f8f3eb;
+      font-size: 0.74rem;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .project-modal-title {
+      margin: 0;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(2rem, 3.2vw, 3.6rem);
+      line-height: 1.02;
+      color: #f8f3eb;
+    }
+
+    .project-modal-subtitle {
+      margin: 12px 0 0;
+      color: rgba(245, 239, 230, 0.66);
+      font-size: 0.86rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .project-modal-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 28px;
+      margin-top: 26px;
+    }
+
+    .project-description-content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .project-description-content p {
+      margin: 0;
+      color: rgba(245, 239, 230, 0.84);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
+    .project-info-panel {
+      align-self: start;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .project-info-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .project-info-item span {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(239, 199, 109, 0.92);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .project-info-item strong {
+      color: #f8f3eb;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    html.project-modal-lock,
+    body.project-modal-lock {
+      overflow: hidden;
+      height: 100vh;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+
+    .construction-reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+      will-change: opacity, transform;
+    }
+
+    .construction-reveal.from-left {
+      transform: translateX(-46px);
+    }
+
+    .construction-reveal.from-right {
+      transform: translateX(46px);
+    }
+
+    .construction-reveal.is-visible {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .construction-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    @media (max-width: 1120px) {
+      .construction-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .construction-toolbar,
+      .project-modal-header,
+      .project-modal-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .construction-hero-inner,
+      .construction-directory-shell {
+        width: min(100%, calc(100% - 22px));
+      }
+
+      .construction-hero {
+        min-height: 78vh;
+        margin-top: -120px;
+        padding-top: 120px;
+      }
+
+      .construction-hero-card {
+        padding: 0 10px;
+        border-radius: 0;
+        text-align: center;
+      }
+
+      .construction-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card {
+        min-height: auto;
+        border-radius: 24px;
+      }
+
+      .project-card-content {
+        padding: 24px;
+      }
+
+      .project-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .project-open-btn {
+        width: 100%;
+      }
+
+      .project-modal {
+        padding: 14px;
+      }
+
+      .project-modal-scroll {
+        padding: 22px;
+      }
+
+      .project-modal-header {
+        text-align: center;
+      }
+
+      .project-gallery-controls {
+        inset: auto 12px 12px;
+      }
+    }
+  </style>
 </head>
 <body data-page="new-construction" data-title="New Construction">
   <div id="site-header"></div>
 
-  <main class="blank-main" aria-label="New Construction page">
-    <section class="blank-stage">
-      <div class="blank-card" aria-hidden="true"></div>
+  <main class="construction-page" aria-label="New Construction page">
+    <section class="construction-hero">
+      <div class="construction-hero-inner">
+        <div class="construction-hero-card construction-reveal from-left">
+          <p class="construction-kicker">Pinnacle Realty New Construction</p>
+          <h1 class="construction-title">Explore upcoming <span>new communities.</span></h1>
+          <p class="construction-description">Browse broker-managed new construction projects, pre-construction opportunities, and featured developments across the GTA. Open each project to view details, pricing, location, status, and image galleries.</p>
+        </div>
+      </div>
     </section>
+
+    <section class="construction-directory">
+      <div class="construction-directory-shell">
+        <div class="construction-toolbar construction-reveal">
+          <div class="construction-heading">
+            <p class="construction-section-kicker">New Construction Directory</p>
+            <h2>Search Pinnacle featured projects.</h2>
+            <p>Only public projects approved through the broker portal appear here.</p>
+          </div>
+
+          <div class="construction-search-wrap">
+            <label for="projectSearch">Search by project or location</label>
+            <input type="search" id="projectSearch" class="construction-search" placeholder="Search projects..." autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="construction-grid construction-reveal" id="constructionGrid"></div>
+
+        <p class="construction-empty" id="constructionEmpty">No public new construction projects are available yet.</p>
+      </div>
+    </section>
+
+    <div class="project-modal" id="projectModal" aria-hidden="true">
+      <div class="project-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+        <div class="project-modal-scroll">
+          <button type="button" class="project-modal-close" id="projectModalClose" aria-label="Close project details">✕</button>
+
+          <div class="project-modal-header">
+            <div class="project-gallery" id="projectModalGallery"></div>
+
+            <div>
+              <p class="construction-modal-label" id="projectModalStatus">Coming Soon</p>
+              <h2 class="project-modal-title" id="projectModalTitle">Project Name</h2>
+              <p class="project-modal-subtitle" id="projectModalLocation">Location</p>
+            </div>
+          </div>
+
+          <div class="project-modal-body">
+            <div class="project-description-content" id="projectModalDescription"></div>
+
+            <aside class="project-info-panel" aria-label="Project information">
+              <div class="project-info-list">
+                <div class="project-info-item">
+                  <span>Starting Price</span>
+                  <strong id="projectModalPrice">Contact for details</strong>
+                </div>
+
+                <div class="project-info-item">
+                  <span>Status</span>
+                  <strong id="projectModalStatusText">Coming Soon</strong>
+                </div>
+
+                <div class="project-info-item">
+                  <span>Location</span>
+                  <strong id="projectModalLocationText">GTA</strong>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <div id="site-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="script.js"></script>
+  <script>
+    (async () => {
+      const constructionGrid = document.getElementById('constructionGrid');
+      const searchInput = document.getElementById('projectSearch');
+      const emptyState = document.getElementById('constructionEmpty');
+      const modal = document.getElementById('projectModal');
+      const modalClose = document.getElementById('projectModalClose');
+      const modalGallery = document.getElementById('projectModalGallery');
+      const modalStatus = document.getElementById('projectModalStatus');
+      const modalTitle = document.getElementById('projectModalTitle');
+      const modalLocation = document.getElementById('projectModalLocation');
+      const modalDescription = document.getElementById('projectModalDescription');
+      const modalPrice = document.getElementById('projectModalPrice');
+      const modalStatusText = document.getElementById('projectModalStatusText');
+      const modalLocationText = document.getElementById('projectModalLocationText');
+      let savedScrollY = 0;
+      let lastFocusedButton = null;
+      let activeProjectCards = [];
+      let activeGalleryIndex = 0;
+
+      const escapeHTML = (value = '') =>
+        String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+
+      const hasSupabasePublicClient = () => typeof supabaseClient !== 'undefined' && supabaseClient;
+
+      const getSummary = (description = '') => {
+        const cleanDescription = description.replace(/\s+/g, ' ').trim();
+        if (!cleanDescription) return 'Open this project to view more details from Pinnacle Realty.';
+        return cleanDescription.length > 155 ? `${cleanDescription.slice(0, 155)}...` : cleanDescription;
+      };
+
+      const formatDescriptionParagraphs = (description = '') => {
+        const cleanDescription = description.trim() || 'Project details are coming soon. Contact Pinnacle Realty for the latest availability, pricing, and release information.';
+
+        return cleanDescription
+          .split(/\n{2,}|\r?\n/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+          .map((paragraph) => `<p>${escapeHTML(paragraph)}</p>`)
+          .join('');
+      };
+
+      const normalizeImages = (project) => {
+        const urls = Array.isArray(project.image_urls) ? project.image_urls.filter(Boolean) : [];
+
+        if (project.image_url && !urls.includes(project.image_url)) {
+          urls.unshift(project.image_url);
+        }
+
+        return urls;
+      };
+
+      const getInitials = (name = 'Project') =>
+        name
+          .split(' ')
+          .filter(Boolean)
+          .map((part) => part[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase();
+
+      const createProjectCard = (project) => {
+        const name = project.project_name?.trim();
+        const location = project.location?.trim();
+
+        if (!name || !location) {
+          return null;
+        }
+
+        const status = project.status || 'Coming Soon';
+        const startingPrice = project.starting_price || 'Contact for details';
+        const description = project.description || '';
+        const imageUrls = normalizeImages(project);
+        const coverImage = imageUrls[0];
+        const initials = getInitials(name);
+
+        const card = document.createElement('article');
+        card.className = 'project-card';
+        card.dataset.projectName = name;
+        card.dataset.projectLocation = location;
+        card.dataset.projectPrice = startingPrice;
+        card.dataset.projectStatus = status;
+        card.dataset.projectDescription = description;
+        card.dataset.projectImages = JSON.stringify(imageUrls);
+
+        card.innerHTML = `
+          <div class="project-image-wrap">
+            ${coverImage
+              ? `<img src="${escapeHTML(coverImage)}" alt="${escapeHTML(name)}" loading="lazy" decoding="async" />`
+              : `<div class="project-image-placeholder">${escapeHTML(initials)}</div>`
+            }
+            ${imageUrls.length > 1 ? `<span class="project-image-count">${imageUrls.length} Images</span>` : ''}
+          </div>
+
+          <div class="project-card-content">
+            <div>
+              <span class="project-status-pill">${escapeHTML(status)}</span>
+              <h3 class="project-name">${escapeHTML(name)}</h3>
+              <p class="project-location">${escapeHTML(location)}</p>
+              <p class="project-card-summary">${escapeHTML(getSummary(description))}</p>
+            </div>
+
+            <div class="project-card-footer">
+              <span class="project-price-tag">${escapeHTML(startingPrice)}</span>
+              <button type="button" class="project-open-btn" data-open-project="${escapeHTML(name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}">View Project</button>
+            </div>
+          </div>
+        `;
+
+        return card;
+      };
+
+      const loadPublicProjects = async () => {
+        if (!constructionGrid || !hasSupabasePublicClient()) {
+          emptyState?.classList.add('is-visible');
+          return;
+        }
+
+        const { data, error } = await supabaseClient
+          .from('new_construction_projects')
+          .select('id, project_name, location, starting_price, status, description, image_url, image_urls, is_public, created_at')
+          .eq('is_public', true)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Could not load public new construction projects:', error);
+          emptyState.textContent = 'New construction projects could not be loaded right now.';
+          emptyState?.classList.add('is-visible');
+          return;
+        }
+
+        constructionGrid.innerHTML = '';
+
+        data.forEach((project) => {
+          const card = createProjectCard(project);
+          if (card) constructionGrid.appendChild(card);
+        });
+      };
+
+      await loadPublicProjects();
+
+      const revealItems = document.querySelectorAll('.construction-reveal');
+      if (revealItems.length && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.16,
+          rootMargin: '0px 0px -8% 0px'
+        });
+
+        revealItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 90}ms`;
+          revealObserver.observe(item);
+        });
+      } else {
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+      }
+
+      activeProjectCards = Array.from(document.querySelectorAll('.project-card'));
+
+      const updateSearch = () => {
+        const query = searchInput?.value.trim().toLowerCase() || '';
+        let visibleCount = 0;
+
+        activeProjectCards.forEach((card) => {
+          const name = card.dataset.projectName?.toLowerCase() || '';
+          const location = card.dataset.projectLocation?.toLowerCase() || '';
+          const isVisible = name.includes(query) || location.includes(query);
+          card.classList.toggle('is-hidden', !isVisible);
+          if (isVisible) visibleCount += 1;
+        });
+
+        emptyState?.classList.toggle('is-visible', visibleCount === 0);
+      };
+
+      const lockScroll = () => {
+        savedScrollY = window.scrollY || document.documentElement.scrollTop;
+        document.documentElement.classList.add('project-modal-lock');
+        document.body.classList.add('project-modal-lock');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollY}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+      };
+
+      const unlockScroll = () => {
+        document.documentElement.classList.remove('project-modal-lock');
+        document.body.classList.remove('project-modal-lock');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, savedScrollY);
+      };
+
+      const updateGalleryCounter = () => {
+        const counter = modalGallery?.querySelector('.project-gallery-counter');
+        const slides = modalGallery?.querySelectorAll('.project-gallery-slide') || [];
+        if (counter && slides.length) {
+          counter.textContent = `${activeGalleryIndex + 1} / ${slides.length}`;
+        }
+      };
+
+      const scrollGalleryTo = (index) => {
+        const track = modalGallery?.querySelector('.project-gallery-track');
+        const slides = modalGallery?.querySelectorAll('.project-gallery-slide') || [];
+        if (!track || !slides.length) return;
+
+        activeGalleryIndex = Math.max(0, Math.min(index, slides.length - 1));
+        track.scrollTo({ left: slides[activeGalleryIndex].offsetLeft, behavior: 'smooth' });
+        updateGalleryCounter();
+      };
+
+      const buildGallery = (images, projectName) => {
+        const safeName = escapeHTML(projectName || 'Project image');
+
+        if (!images.length) {
+          modalGallery.innerHTML = `
+            <div class="project-gallery-track">
+              <div class="project-gallery-slide">
+                <div class="project-image-placeholder">${escapeHTML(getInitials(projectName))}</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        modalGallery.innerHTML = `
+          <span class="project-gallery-counter">1 / ${images.length}</span>
+          <div class="project-gallery-track">
+            ${images.map((image, index) => `
+              <div class="project-gallery-slide">
+                <img src="${escapeHTML(image)}" alt="${safeName} image ${index + 1}" loading="lazy" decoding="async" />
+              </div>
+            `).join('')}
+          </div>
+          ${images.length > 1 ? `
+            <div class="project-gallery-controls">
+              <button type="button" class="project-gallery-btn" data-gallery-prev aria-label="Previous project image">‹</button>
+              <button type="button" class="project-gallery-btn" data-gallery-next aria-label="Next project image">›</button>
+            </div>
+          ` : ''}
+        `;
+
+        activeGalleryIndex = 0;
+        updateGalleryCounter();
+
+        const track = modalGallery.querySelector('.project-gallery-track');
+        track?.addEventListener('scroll', () => {
+          const slides = Array.from(modalGallery.querySelectorAll('.project-gallery-slide'));
+          if (!slides.length) return;
+
+          const closestIndex = slides.reduce((closest, slide, index) => {
+            const currentDistance = Math.abs(slide.offsetLeft - track.scrollLeft);
+            const closestDistance = Math.abs(slides[closest].offsetLeft - track.scrollLeft);
+            return currentDistance < closestDistance ? index : closest;
+          }, 0);
+
+          activeGalleryIndex = closestIndex;
+          updateGalleryCounter();
+        });
+      };
+
+      const openProjectModal = (card, trigger) => {
+        if (!card || !modal) return;
+        lastFocusedButton = trigger;
+
+        const name = card.dataset.projectName || '';
+        const location = card.dataset.projectLocation || 'GTA';
+        const price = card.dataset.projectPrice || 'Contact for details';
+        const status = card.dataset.projectStatus || 'Coming Soon';
+        const description = card.dataset.projectDescription || '';
+        let images = [];
+
+        try {
+          images = JSON.parse(card.dataset.projectImages || '[]');
+        } catch {
+          images = [];
+        }
+
+        buildGallery(images, name);
+        modalStatus.textContent = status;
+        modalTitle.textContent = name;
+        modalLocation.textContent = location;
+        modalDescription.innerHTML = formatDescriptionParagraphs(description);
+        modalPrice.textContent = price;
+        modalStatusText.textContent = status;
+        modalLocationText.textContent = location;
+
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        lockScroll();
+      };
+
+      const closeProjectModal = () => {
+        modal?.classList.remove('is-open');
+        modal?.setAttribute('aria-hidden', 'true');
+        unlockScroll();
+        lastFocusedButton?.focus();
+      };
+
+      searchInput?.addEventListener('input', updateSearch);
+
+      document.addEventListener('click', (event) => {
+        const openButton = event.target.closest('[data-open-project]');
+        if (openButton) {
+          const card = openButton.closest('.project-card');
+          openProjectModal(card, openButton);
+          return;
+        }
+
+        if (event.target.closest('[data-gallery-prev]')) {
+          scrollGalleryTo(activeGalleryIndex - 1);
+          return;
+        }
+
+        if (event.target.closest('[data-gallery-next]')) {
+          scrollGalleryTo(activeGalleryIndex + 1);
+        }
+      });
+
+      modalClose?.addEventListener('click', closeProjectModal);
+      modal?.addEventListener('click', (event) => {
+        if (event.target === modal) closeProjectModal();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal?.classList.contains('is-open')) {
+          closeProjectModal();
+        }
+
+        if (event.key === 'ArrowLeft' && modal?.classList.contains('is-open')) {
+          scrollGalleryTo(activeGalleryIndex - 1);
+        }
+
+        if (event.key === 'ArrowRight' && modal?.classList.contains('is-open')) {
+          scrollGalleryTo(activeGalleryIndex + 1);
+        }
+      });
+
+      updateSearch();
+    })();
+  </script>
 </body>
 </html>
