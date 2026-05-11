@@ -484,7 +484,7 @@
         <div class="alerts-success-state" id="alertsSuccessState" aria-live="polite">
           <p class="alerts-success-label">You’re on the list</p>
           <h3>Monthly Pinnacle updates are on the way.</h3>
-          <p>Your backend can be connected later. For now, this success state confirms the subscription action on the frontend and keeps the page feeling complete.</p>
+          <p>Thank you for subscribing. You’ll receive Pinnacle Realty updates once a month with market insights, listing highlights, and new blog updates.</p>
         </div>
       </section>
 
@@ -561,17 +561,53 @@
       const alertsForm = document.getElementById('alertsSubscribeForm');
       const alertsEmail = document.getElementById('alertsEmail');
       const alertsSuccessState = document.getElementById('alertsSuccessState');
+      const SUBSCRIBE_FUNCTION_URL = 'https://daxrirnhbcfpqzswjofl.supabase.co/functions/v1/subscribe-monthly';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRheHJpcm5oYmNmcHF6c3dqb2ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTMyMDEsImV4cCI6MjA5Mjg4OTIwMX0.TPUO_0M1cRLnmU035NKV7VxqG7jQGblS_v5ecM3Ptyo';
 
-      alertsForm?.addEventListener('submit', (event) => {
+      alertsForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        if (!alertsEmail?.value.trim()) {
+        const email = alertsEmail?.value.trim();
+
+        if (!email) {
           alertsEmail?.focus();
           return;
         }
 
-        alertsSuccessState?.classList.add('is-visible');
-        alertsForm.reset();
+        const submitButton = alertsForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton?.textContent || 'Subscribe';
+
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Subscribing...';
+        }
+
+        try {
+          const response = await fetch(SUBSCRIBE_FUNCTION_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            },
+            body: JSON.stringify({ email })
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Subscription failed. Please try again.');
+          }
+
+          alertsSuccessState?.classList.add('is-visible');
+          alertsForm.reset();
+        } catch (error) {
+          alert(error.message || 'Something went wrong. Please try again.');
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+          }
+        }
       });
     })();
   </script>
