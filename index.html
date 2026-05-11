@@ -8,7 +8,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pinnacle Realty | Pinnacle Realty</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" as="image" href="assets/images/loading.png">
+  <link rel="preload" as="image" href="assets/images/mobile-loading.png">
   <style>
+    body.home-loading-active {
+      overflow: hidden;
+    }
+
+    .home-loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #050505;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    .home-loading-screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .home-loading-screen picture,
+    .home-loading-screen img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .home-loading-screen img {
+      object-fit: cover;
+    }
+
+    .home-loading-fade {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(214, 171, 77, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.28));
+      pointer-events: none;
+    }
     .hero-section {
       min-height: 100vh;
       background: url('assets/images/hero.jpg') center/cover no-repeat;
@@ -442,6 +487,17 @@
   </style>
 </head>
 <body data-page="home" data-title="Pinnacle Realty">
+  <script>
+    document.body.classList.add('home-loading-active');
+  </script>
+
+  <div class="home-loading-screen" id="homeLoadingScreen" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 768px)" srcset="assets/images/mobile-loading.png">
+      <img src="assets/images/loading.png" alt="">
+    </picture>
+    <div class="home-loading-fade"></div>
+  </div>
   <div id="site-header"></div>
 
   <main class="blank-main" aria-label="Pinnacle Realty page">
@@ -479,6 +535,20 @@
 
   <div id="site-footer"></div>
   <script src="script.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      const loadingScreen = document.getElementById('homeLoadingScreen');
+
+      window.setTimeout(() => {
+        loadingScreen?.classList.add('is-hidden');
+        document.body.classList.remove('home-loading-active');
+
+        window.setTimeout(() => {
+          loadingScreen?.remove();
+        }, 500);
+      }, 350);
+    });
+  </script>
   <script>
     (function () {
       const typedTarget = document.getElementById('typedHeroText');
