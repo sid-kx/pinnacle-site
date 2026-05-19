@@ -534,7 +534,7 @@ function createQuickSignupPopup() {
     openPanel();
   });
 
-  form?.addEventListener('submit', (event) => {
+  form?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const submission = {
@@ -549,11 +549,33 @@ function createQuickSignupPopup() {
 
     if (!submission.name || !submission.email) return;
 
-    window.dispatchEvent(new CustomEvent('quick-signup-submit', { detail: submission }));
-    console.log('Quick signup submission ready:', submission);
+    const submitButton = form.querySelector('.quick-signup-submit');
 
-    form.reset();
-    success?.classList.add('is-visible');
+    try {
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+      }
+
+      const zapierResponse = await fetch('https://hooks.zapier.com/hooks/catch/27658537/4om81g5/', {
+        method: 'POST',
+        body: new URLSearchParams(submission)
+      });
+
+      console.log('Quick signup Zapier payload sent:', submission);
+      console.log('Quick signup Zapier webhook response:', zapierResponse.status);
+
+      form.reset();
+      success?.classList.add('is-visible');
+    } catch (zapierError) {
+      console.error('Quick signup Zapier webhook error:', zapierError);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Inquiry →';
+      }
+    }
   });
 
   if (isHomePage) {
