@@ -80,25 +80,25 @@ import { supabase } from "./supabase-config.js";
       }
 
       try {
+        const zapierPayload = {
+          name: submission.name,
+          email: submission.email,
+          phone: submission.phone,
+          intent: submission.intent,
+          message: submission.message,
+          source_site: submission.source_site,
+          lead_source: "Pinnacle Realty Website",
+          type: submission.type,
+          status: submission.status,
+          submitted_at: new Date().toISOString()
+        };
+
         const zapierResponse = await fetch("https://hooks.zapier.com/hooks/catch/27658537/4odf62l/", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name: submission.name,
-            email: submission.email,
-            phone: submission.phone,
-            intent: submission.intent,
-            message: submission.message,
-            source_site: submission.source_site,
-            lead_source: "Pinnacle Realty Website",
-            type: submission.type,
-            status: submission.status,
-            submitted_at: new Date().toISOString()
-          })
+          body: JSON.stringify(zapierPayload)
         });
 
+        console.log("Zapier payload sent:", zapierPayload);
         console.log("Zapier webhook response:", zapierResponse.status);
       } catch (zapierError) {
         console.error("Zapier webhook error:", zapierError);
