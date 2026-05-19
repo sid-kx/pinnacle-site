@@ -462,21 +462,108 @@ function optimizePagePerformance() {
 }
 
 
-function createGetInTouchButton() {
-  if (document.querySelector('.fixed-get-in-touch')) return;
 
-  const button = document.createElement('a');
-  button.className = 'fixed-get-in-touch';
-  button.href = 'contact.html#contact-form';
-  button.setAttribute('aria-label', 'Get in touch with Pinnacle Realty');
-  button.textContent = 'GET IN TOUCH →';
+function createQuickSignupPopup() {
+  const path = window.location.pathname || '';
+  const isHomePage = path === '/' || path.endsWith('/index.html') || path.endsWith('index.html') || path === '';
 
-  document.body.appendChild(button);
+  if (document.querySelector('.quick-signup-panel')) return;
+
+  const panel = document.createElement('aside');
+  panel.className = 'quick-signup-panel';
+  panel.setAttribute('aria-label', 'Quick signup inquiry form');
+  panel.setAttribute('aria-hidden', 'true');
+
+  panel.innerHTML = `
+    <button class="quick-signup-toggle" type="button" aria-label="Open quick signup form" aria-expanded="false">
+      <span class="quick-signup-arrow" aria-hidden="true"></span>
+      <span class="quick-signup-close" aria-hidden="true">×</span>
+    </button>
+
+    <div class="quick-signup-card">
+      <p class="quick-signup-kicker">Quick Sign Up</p>
+      <h2 class="quick-signup-title">Start your inquiry.</h2>
+      <p class="quick-signup-copy">Leave your name and email, and Pinnacle Realty will follow up with you shortly.</p>
+
+      <form class="quick-signup-form" id="quickSignupForm">
+        <label class="quick-signup-field" for="quickSignupName">
+          <span>Name</span>
+          <input id="quickSignupName" name="name" type="text" autocomplete="name" required />
+        </label>
+
+        <label class="quick-signup-field" for="quickSignupEmail">
+          <span>Email</span>
+          <input id="quickSignupEmail" name="email" type="email" autocomplete="email" required />
+        </label>
+
+        <button class="quick-signup-submit" type="submit">Submit Inquiry →</button>
+      </form>
+
+      <div class="quick-signup-success" id="quickSignupSuccess" aria-live="polite">
+        Thank you. Your inquiry has been received.
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+
+  const toggle = panel.querySelector('.quick-signup-toggle');
+  const form = panel.querySelector('#quickSignupForm');
+  const success = panel.querySelector('#quickSignupSuccess');
+
+  const openPanel = () => {
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    toggle?.setAttribute('aria-expanded', 'true');
+    toggle?.setAttribute('aria-label', 'Close quick signup form');
+  };
+
+  const closePanel = () => {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open quick signup form');
+  };
+
+  toggle?.addEventListener('click', () => {
+    if (panel.classList.contains('open')) {
+      closePanel();
+      return;
+    }
+
+    openPanel();
+  });
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const submission = {
+      name: panel.querySelector('#quickSignupName')?.value.trim() || '',
+      email: panel.querySelector('#quickSignupEmail')?.value.trim() || '',
+      source_site: window.location.hostname || 'pinnaclerealty.ca',
+      lead_source: 'Pinnacle Realty Homepage Quick Sign Up',
+      type: 'homepage_quick_signup',
+      status: 'new',
+      submitted_at: new Date().toISOString()
+    };
+
+    if (!submission.name || !submission.email) return;
+
+    window.dispatchEvent(new CustomEvent('quick-signup-submit', { detail: submission }));
+    console.log('Quick signup submission ready:', submission);
+
+    form.reset();
+    success?.classList.add('is-visible');
+  });
+
+  if (isHomePage) {
+    window.setTimeout(openPanel, 3000);
+  }
 }
 
 createNav();
 createFooter();
-createGetInTouchButton();
+createQuickSignupPopup();
 optimizePagePerformance();
 
 // Logo sizing fix
