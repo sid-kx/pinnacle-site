@@ -496,6 +496,11 @@ function createQuickSignupPopup() {
           <input id="quickSignupEmail" name="email" type="email" autocomplete="email" required />
         </label>
 
+        <label class="quick-signup-field" for="quickSignupPhone">
+          <span>Phone</span>
+          <input id="quickSignupPhone" name="phone" type="tel" autocomplete="tel" required />
+        </label>
+
         <button class="quick-signup-submit" type="submit">Submit Inquiry →</button>
       </form>
 
@@ -540,6 +545,7 @@ function createQuickSignupPopup() {
     const submission = {
       name: panel.querySelector('#quickSignupName')?.value.trim() || '',
       email: panel.querySelector('#quickSignupEmail')?.value.trim() || '',
+      phone: panel.querySelector('#quickSignupPhone')?.value.trim() || '',
       source_site: window.location.hostname || 'pinnaclerealty.ca',
       lead_source: 'Pinnacle Realty Homepage Quick Sign Up',
       type: 'homepage_quick_signup',
@@ -547,7 +553,7 @@ function createQuickSignupPopup() {
       submitted_at: new Date().toISOString()
     };
 
-    if (!submission.name || !submission.email) return;
+    if (!submission.name || !submission.email || !submission.phone) return;
 
     const submitButton = form.querySelector('.quick-signup-submit');
 
