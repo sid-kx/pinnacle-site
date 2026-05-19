@@ -583,9 +583,28 @@ function createQuickSignupPopup() {
   }
 }
 
+function createZapierChatbot() {
+  if (document.querySelector('zapier-interfaces-chatbot-embed')) return;
+
+  if (!document.querySelector('script[src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"]')) {
+    const zapierScript = document.createElement('script');
+    zapierScript.async = true;
+    zapierScript.type = 'module';
+    zapierScript.src = 'https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js';
+    document.body.appendChild(zapierScript);
+  }
+
+  const chatbot = document.createElement('zapier-interfaces-chatbot-embed');
+  chatbot.setAttribute('is-popup', 'true');
+  chatbot.setAttribute('chatbot-id', 'cmpd2aie9007nvaf2gco8orac');
+
+  document.body.appendChild(chatbot);
+}
+
 createNav();
 createFooter();
 createQuickSignupPopup();
+createZapierChatbot();
 optimizePagePerformance();
 
 // Logo sizing fix
