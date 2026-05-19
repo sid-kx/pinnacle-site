@@ -461,8 +461,22 @@ function optimizePagePerformance() {
   }, { once: true });
 }
 
+
+function createGetInTouchButton() {
+  if (document.querySelector('.fixed-get-in-touch')) return;
+
+  const button = document.createElement('a');
+  button.className = 'fixed-get-in-touch';
+  button.href = 'contact.html#contact-form';
+  button.setAttribute('aria-label', 'Get in touch with Pinnacle Realty');
+  button.textContent = 'GET IN TOUCH →';
+
+  document.body.appendChild(button);
+}
+
 createNav();
 createFooter();
+createGetInTouchButton();
 optimizePagePerformance();
 
 // Logo sizing fix
