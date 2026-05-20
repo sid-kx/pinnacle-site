@@ -605,6 +605,41 @@ function createZapierChatbot() {
   chatbot.setAttribute('chatbot-id', 'cmpd2aie9007nvaf2gco8orac');
 
   document.body.appendChild(chatbot);
+
+  createChatbotGreeting(chatbot);
+}
+
+function createChatbotGreeting(chatbot) {
+  const path = window.location.pathname || '';
+  const isIndexPage = path === '/' || path.endsWith('/index.html') || path.endsWith('index.html') || path === '';
+
+  if (!isIndexPage) return;
+  if (document.querySelector('.chatbot-greeting')) return;
+
+  const greeting = document.createElement('div');
+  greeting.className = 'chatbot-greeting';
+  greeting.setAttribute('role', 'status');
+  greeting.setAttribute('aria-live', 'polite');
+  greeting.innerHTML = `
+    <span class="chatbot-greeting-text">Welcome to Pinnacle Realty, I'm here to help you with all things real estate. How can I assist you today?</span>
+    <span class="chatbot-greeting-tail" aria-hidden="true"></span>
+  `;
+
+  document.body.appendChild(greeting);
+
+  const hideGreeting = () => {
+    greeting.classList.add('is-hidden');
+    window.setTimeout(() => {
+      greeting.remove();
+    }, 260);
+  };
+
+  chatbot?.addEventListener('click', hideGreeting, { once: true });
+
+  greeting.addEventListener('click', () => {
+    hideGreeting();
+    chatbot?.click();
+  });
 }
 
 createNav();
