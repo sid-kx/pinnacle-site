@@ -125,7 +125,7 @@ This repo is part of a larger Pinnacle digital platform:
 | --- | --- | --- |
 | Main Website | pinnaclerealty.ca | Public brokerage website |
 | Join Website | join.pinnaclerealty.ca | Realtor recruitment landing page |
-| Portal | agentsso.pinnaclerealty.ca / portal.pinnaclerealty.ca | Private broker and agent dashboard |
+| Portal | agentsso.pinnaclerealty.ca | Private broker and agent dashboard |
 | Blog | blogs.pinnaclerealty.ca | Articles, updates, and agent content |
 
 ## Planned / Future Features
