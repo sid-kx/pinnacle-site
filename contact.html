@@ -78,6 +78,7 @@
     .contact-hero::before,
     .contact-form-card::before,
     .contact-info-card::before,
+    .broker-contact-card::before,
     .contact-paths::before,
     .contact-path-card::before,
     .contact-final-cta::before {
@@ -92,6 +93,7 @@
     .contact-side-card,
     .contact-form-card,
     .contact-info-card,
+    .broker-contact-card,
     .contact-paths,
     .contact-path-card,
     .contact-final-cta {
@@ -119,6 +121,8 @@
     .contact-section-label,
     .contact-side-label,
     .contact-form-label,
+    .broker-contact-label,
+    .broker-contact-item-label,
     .contact-success-label {
       margin: 0 0 18px;
       font-size: 0.8rem;
@@ -131,6 +135,8 @@
     .contact-side-heading,
     .contact-form-card h2,
     .contact-info-card h2,
+    .broker-contact-card h2,
+    .broker-contact-value,
     .contact-paths h2,
     .contact-path-card h3,
     .contact-final-cta h2,
@@ -144,7 +150,7 @@
     }
 
     .contact-title {
-      font-size: clamp(2.7rem, 4.8vw, 5rem);
+      font-size: clamp(2.7rem, 4.8vw, 2rem);
       max-width: 780px;
     }
 
@@ -264,6 +270,7 @@
 
     .contact-form-card,
     .contact-info-card,
+    .broker-contact-card,
     .contact-paths,
     .contact-path-card,
     .contact-final-cta {
@@ -277,6 +284,7 @@
 
     .contact-form-card,
     .contact-info-card,
+    .broker-contact-card,
     .contact-paths,
     .contact-final-cta {
       padding: 34px 32px;
@@ -287,6 +295,13 @@
     .contact-paths h2,
     .contact-final-cta h2 {
       font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .broker-contact-card h2 {
+      font-size: clamp(2.6rem, 4.1vw, 4.8rem);
+      line-height: 1.12;
+      color: #d6ab4d;
+      text-shadow: 0 16px 42px rgba(0,0,0,0.34);
     }
 
     .contact-helper {
@@ -390,6 +405,50 @@
 
     .contact-info-card p {
       margin: 16px 0 0;
+    }
+
+    .broker-contact-card {
+      margin-top: 24px;
+      padding: 34px 32px;
+      border-color: rgba(214,171,77,0.16);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(214,171,77,0.10), transparent 24%),
+        linear-gradient(180deg, rgba(12,12,12,0.92), rgba(7,7,7,0.97));
+    }
+
+    .broker-contact-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .broker-contact-details {
+      margin-top: 30px;
+      display: grid;
+      gap: 0;
+    }
+
+    .broker-contact-item {
+      padding: 26px 0;
+      border-top: 1px solid rgba(214,171,77,0.18);
+    }
+
+    .broker-contact-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .broker-contact-item-label {
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .broker-contact-value {
+      display: block;
+      font-size: clamp(1.65rem, 3vw, 2.65rem);
+      line-height: 1.18;
+      color: #f8f3eb;
+      text-shadow: none;
+      word-break: break-word;
     }
 
     .contact-info-list {
@@ -568,11 +627,20 @@
 
       .contact-form-card,
       .contact-info-card,
+      .broker-contact-card,
       .contact-paths,
       .contact-path-card,
       .contact-final-cta {
         padding: 24px 20px;
         border-radius: 24px;
+      }
+
+      .broker-contact-card h2 {
+        font-size: clamp(2.2rem, 10vw, 3.35rem);
+      }
+
+      .broker-contact-value {
+        font-size: clamp(1.35rem, 6vw, 2rem);
       }
 
       .contact-form-grid {
@@ -667,6 +735,23 @@
             <li>A follow-up conversation helps clarify your next step.</li>
             <li>Pinnacle Realty helps guide the process from there.</li>
           </ul>
+        </aside>
+
+        <aside class="broker-contact-card reveal-on-scroll" aria-label="Broker of record contact information">
+          <div class="broker-contact-content">
+            <p class="broker-contact-label">Contact Information</p>
+            <h2>Get In Touch With Our Team</h2>
+            <div class="broker-contact-details">
+              <div class="broker-contact-item">
+                <span class="broker-contact-item-label">Phone</span>
+                <a class="broker-contact-value" href="tel:+19056097653">(905) 609-SOLD</a>
+              </div>
+              <div class="broker-contact-item">
+                <span class="broker-contact-item-label">Address</span>
+                <a class="broker-contact-value" href="https://www.google.com/maps/search/?api=1&query=1625%20Steeles%20Ave%20E%20Brampton%20ON" target="_blank" rel="noopener noreferrer">1625 Steeles Ave E<br>Brampton, ON</a>
+              </div>
+            </div>
+          </div>
         </aside>
       </section>
 
