@@ -20,6 +20,7 @@ const navConfig = [
       { title: 'Services For Buyers', href: 'services-buyers.html', key: 'services-buyers' },
       { title: 'Mortgage Guide', href: 'mortgage-guide.html', key: 'mortgage-guide' },
       { title: 'Get Listing Alerts', href: 'listing-alerts.html', key: 'listing-alerts' },
+      { title: 'Direct Deposit', href: 'https://keybox.payload.com/pinnacle-realty/payment/pinnacle-realty-trust', key: 'direct-deposit' }
     ]
   },
   {
