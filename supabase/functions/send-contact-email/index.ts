@@ -1,3 +1,6 @@
+// Temporary pause. Set to false and redeploy this function to resume email.
+const EMAIL_DELIVERY_PAUSED = true;
+
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
@@ -25,6 +28,14 @@ Deno.serve(async (req) => {
           ...corsHeaders,
           "Content-Type": "application/json",
         },
+      });
+    }
+
+    // Also blocks direct calls from older browser sessions and external triggers.
+    if (EMAIL_DELIVERY_PAUSED) {
+      return new Response(JSON.stringify({ success: true, paused: true, sent: 0 }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 

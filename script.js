@@ -464,7 +464,12 @@ function optimizePagePerformance() {
 
 
 
+// Quick signup only forwards to Zapier and has no database fallback.
+// Hide it during the pause so visitors do not submit inquiries that cannot be saved.
+const QUICK_SIGNUP_FORWARDING_PAUSED = true;
+
 function createQuickSignupPopup() {
+  if (QUICK_SIGNUP_FORWARDING_PAUSED) return;
   const path = window.location.pathname || '';
   const isHomePage = path === '/' || path.endsWith('/index.html') || path.endsWith('index.html') || path === '';
 

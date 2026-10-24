@@ -165,3 +165,30 @@ The visual identity is based on:
 Built and managed by **Sid Kamboj** as part of the Pinnacle Realty digital platform.
 
 Sid handles website development, UI/UX design, branding implementation, digital marketing structure, and platform expansion for Pinnacle Realty.
+
+
+## Temporary email and lead-forwarding pause
+
+Outgoing email and direct Zapier lead forwarding are paused in the source code:
+
+- `assets/js/contact-form.js`: `CONTACT_DELIVERY_PAUSED = true` skips the contact email function and contact Zapier webhook. Contact inquiries still save to `contact_submissions`.
+- `script.js`: `QUICK_SIGNUP_FORWARDING_PAUSED = true` hides the quick signup popup. This form only forwards to Zapier and has no database fallback; the Contact page remains available.
+- `supabase/functions/send-contact-email/index.ts`: `EMAIL_DELIVERY_PAUSED = true` returns `{ success: true, paused: true, sent: 0 }` without sending through Resend, including direct calls from older clients.
+- `supabase/functions/send-monthly-update/index.ts`: `EMAIL_DELIVERY_PAUSED = true` skips subscriber reads, Resend delivery, and delivery timestamp updates. Scheduled calls return a paused response with zero sent.
+
+Monthly subscription registration still saves to `monthly_subscribers`. Email links and the embedded Zapier chatbot are unchanged; the chatbot's hosted workflow is not defined in this repository. No active FormSubmit handler was found despite the historical Tech Stack entry above.
+
+### Apply to the live site
+
+Deploy both changed Supabase functions to the site's project (`daxrirnhbcfpqzswjofl`), then publish the updated static website:
+
+```sh
+supabase functions deploy send-contact-email --project-ref daxrirnhbcfpqzswjofl
+supabase functions deploy send-monthly-update --project-ref daxrirnhbcfpqzswjofl
+```
+
+Local edits alone do not pause already-deployed functions or website scripts. Mailbox forwarding rules, database triggers, hosted chatbot actions, and already-running or queued Zapier/Resend deliveries are outside this repository and are not changed by this pause.
+
+### Resume later
+
+Set the four pause constants above to `false`, redeploy both functions, and publish the updated static website. Saved contact inquiries are not automatically replayed by this code. The monthly sender will use the active subscriber list on its next invocation.

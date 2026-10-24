@@ -1,5 +1,8 @@
 import { supabase } from "./supabase-config.js";
 
+// Temporary pause: keep saving inquiries, but do not send email or forward leads.
+const CONTACT_DELIVERY_PAUSED = true;
+
 (() => {
   console.log("contact-form.js loaded with Supabase");
 
@@ -68,46 +71,48 @@ import { supabase } from "./supabase-config.js";
 
       if (error) throw error;
 
-      const { error: emailError, data: emailData } = await supabase.functions.invoke("send-contact-email", {
-        body: submission
-      });
-
-      console.log("Email function response:", emailData);
-      console.log("Email function error:", emailError);
-
-      if (emailError) {
-        console.error("Email notification error:", emailError);
-      }
-
-      try {
-        const zapierPayload = {
-          name: submission.name,
-          email: submission.email,
-          phone: submission.phone,
-          intent: submission.intent,
-          message: submission.message,
-          source_site: submission.source_site,
-          lead_source: "Pinnacle Realty Website",
-          type: submission.type,
-          status: submission.status,
-          submitted_at: new Date().toISOString()
-        };
-
-        const zapierResponse = await fetch("https://hooks.zapier.com/hooks/catch/27658537/4odf62l/", {
-          method: "POST",
-          body: JSON.stringify(zapierPayload)
+      if (!CONTACT_DELIVERY_PAUSED) {
+        const { error: emailError, data: emailData } = await supabase.functions.invoke("send-contact-email", {
+          body: submission
         });
 
-        console.log("Zapier payload sent:", zapierPayload);
-        console.log("Zapier webhook response:", zapierResponse.status);
-      } catch (zapierError) {
-        console.error("Zapier webhook error:", zapierError);
+        console.log("Email function response:", emailData);
+        console.log("Email function error:", emailError);
+
+        if (emailError) {
+          console.error("Email notification error:", emailError);
+        }
+
+        try {
+          const zapierPayload = {
+            name: submission.name,
+            email: submission.email,
+            phone: submission.phone,
+            intent: submission.intent,
+            message: submission.message,
+            source_site: submission.source_site,
+            lead_source: "Pinnacle Realty Website",
+            type: submission.type,
+            status: submission.status,
+            submitted_at: new Date().toISOString()
+          };
+
+          const zapierResponse = await fetch("https://hooks.zapier.com/hooks/catch/27658537/4odf62l/", {
+            method: "POST",
+            body: JSON.stringify(zapierPayload)
+          });
+
+          console.log("Zapier payload sent:", zapierPayload);
+          console.log("Zapier webhook response:", zapierResponse.status);
+        } catch (zapierError) {
+          console.error("Zapier webhook error:", zapierError);
+        }
       }
 
       contactForm.reset();
       contactSuccessState?.classList.add("is-visible");
 
-      console.log("Contact submission saved to Supabase and email notification requested.");
+      console.log("Contact submission saved to Supabase.");
     } catch (error) {
       console.error("Supabase contact form error:", error);
       alert("Something went wrong. Please try again.");

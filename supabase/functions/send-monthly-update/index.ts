@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+// Temporary pause. Set to false and redeploy this function to resume email.
+const EMAIL_DELIVERY_PAUSED = true;
+
 serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization");
@@ -9,6 +12,14 @@ serve(async (req) => {
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Stop before reading subscribers, sending mail, or changing delivery timestamps.
+    if (EMAIL_DELIVERY_PAUSED) {
+      return new Response(JSON.stringify({ success: true, paused: true, sent: 0, failed: [] }), {
+        status: 200,
         headers: { "Content-Type": "application/json" },
       });
     }
